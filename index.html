@@ -1,586 +1,960 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NarrativeForge AI | 日系輕小說懸疑故事大綱生成器</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            noir: {
-              900: '#0a0d13',
-              800: '#111722',
-              700: '#1a2332',
-              600: '#263346',
-              500: '#3a4c68'
-            },
-            crimson: {
-              DEFAULT: '#e11d48',
-              glow: 'rgba(225, 29, 72, 0.35)'
-            },
-            cyanic: {
-              DEFAULT: '#06b6d4',
-              glow: 'rgba(6, 182, 212, 0.35)'
-            },
-            amber: {
-              DEFAULT: '#f59e0b'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novelis 原創小說企劃與章節大綱生成系統</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#FAF8F5',
+                        ink: '#2D3142',
+                        amberAccent: '#C97A3E',
+                        deepTeal: '#1F4E5B',
+                        paperBorder: '#E8E2D9'
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', '"Songti TC"', 'Georgia', 'serif'],
+                        sans: ['"Noto Sans TC"', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
             }
-          },
-          fontFamily: {
-            sans: ['"Noto Sans TC"', '"Noto Sans JP"', 'sans-serif'],
-            title: ['"Cinzel"', '"Noto Sans JP"', 'serif']
-          }
         }
-      }
-    }
-  </script>
-
-  <style>
-    body {
-      background-color: #070a0f;
-      color: #e2e8f0;
-      background-image: 
-        radial-gradient(circle at 15% 20%, rgba(225, 29, 72, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
-      background-attachment: fixed;
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #0f172a;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 3px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #475569;
-    }
-    .glass-panel {
-      background: rgba(17, 23, 34, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
-  </style>
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F7F5F0;
+            color: #2D3142;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-image: radial-gradient(#E8E2D9 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .font-book-title {
+            font-family: 'Noto Serif TC', serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1EDE4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4CBBD;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B3A592;
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-crimson selection:text-white">
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-100 selection:text-amber-900">
 
-  <!-- Top Navigation Bar -->
-  <header class="border-b border-slate-800/80 bg-noir-900/90 backdrop-blur sticky top-0 z-50 px-6 py-3.5 flex justify-between items-center shadow-lg">
-    <div class="flex items-center space-x-3">
-      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-crimson to-purple-600 flex items-center justify-center shadow-lg shadow-crimson-glow">
-        <i data-lucide="compass" class="w-5 h-5 text-white"></i>
-      </div>
-      <div>
-        <h1 class="font-title text-xl font-bold tracking-wider text-slate-100 flex items-center gap-2">
-          NarrativeForge <span class="text-xs px-2 py-0.5 rounded-full bg-crimson/20 text-rose-400 border border-crimson/30">AI v1.2</span>
-        </h1>
-        <p class="text-[11px] text-slate-400">本格懸疑 × 敘事詭計 輕小說架構工程引擎</p>
-      </div>
-    </div>
-    
-    <div class="flex items-center gap-3">
-      <button id="btn-export-md" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-300 bg-noir-700 hover:bg-noir-600 border border-slate-700 transition">
-        <i data-lucide="download" class="w-4 h-4"></i> 匯出 Markdown
-      </button>
-      <button id="btn-export-json" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-300 bg-noir-700 hover:bg-noir-600 border border-slate-700 transition">
-        <i data-lucide="file-json" class="w-4 h-4"></i> 匯出 JSON
-      </button>
-      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="p-2 text-slate-400 hover:text-white transition">
-        <i data-lucide="github" class="w-5 h-5"></i>
-      </a>
-    </div>
-  </header>
-
-  <!-- Main Container -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-    <!-- Left Column: Generator Controls & Constraints (4 Cols) -->
-    <aside class="lg:col-span-4 space-y-5">
-      <div class="glass-panel p-5 rounded-2xl shadow-xl">
-        <h2 class="text-base font-bold text-slate-200 flex items-center gap-2 mb-4 border-b border-slate-800 pb-2">
-          <i data-lucide="sliders" class="w-4 h-4 text-cyanic"></i> 故事核心參數設定
-        </h2>
-
-        <form id="generator-form" class="space-y-4">
-          <!-- 故事基調 -->
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">主題基調與氛圍</label>
-            <select id="novel-tone" class="w-full bg-noir-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyanic transition">
-              <option value="psychological-tearjerker">胃痛催淚 × 青春殘酷（如替身代行、生命倒數）</option>
-              <option value="high-school-survival">封閉學園 × 信用點數心戰（高智商欺瞞）</option>
-              <option value="supernatural-detective">現代異能 × 城市怪談死局（本格推理）</option>
-              <option value="identity-swap">身分倒錯 × 記憶迷宮（極致敘事詭計）</option>
-            </select>
-          </div>
-
-          <!-- 異常工作/機制名 -->
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">核心機制 / 特殊工作職稱</label>
-            <input type="text" id="job-title" value="遺憾代行員（Proxy Mourner）" class="w-full bg-noir-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyanic transition" placeholder="例如：時薪250日圓的替身葬儀">
-          </div>
-
-          <!-- 時薪與代價 -->
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">極低時薪設定</label>
-              <input type="text" id="wage" value="250 日圓 / 小時" class="w-full bg-noir-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyanic transition">
+    <!-- 頂部導覽列 -->
+    <header class="bg-white/85 backdrop-blur-md border-b border-paperBorder sticky top-0 z-40 transition-all shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="w-9 h-9 rounded-xl bg-amber-800 text-amber-50 flex items-center justify-center font-book-title font-bold text-lg shadow-inner">
+                    墨
+                </span>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-ink flex items-center gap-2">
+                        Novelis 原創構想引擎
+                        <span class="text-[10px] font-normal uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full">100% 免費・免 API</span>
+                    </h1>
+                </div>
             </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">任務時限</label>
-              <input type="text" id="time-limit" value="72 小時倒數" class="w-full bg-noir-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyanic transition">
+            <div class="flex items-center gap-2 text-xs text-stone-500">
+                <span class="hidden sm:inline-block">✨ 純前端離線可執行・安全合規無侵權</span>
+                <button onclick="fillRandomExample()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium rounded-lg transition duration-200 text-xs">
+                    隨機靈感範例
+                </button>
             </div>
-          </div>
-
-          <!-- 特殊道具/認知干擾裝置 -->
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">認知干預裝置 / 關鍵道具</label>
-            <input type="text" id="device-name" value="神經投影調諧器「白鏡」" class="w-full bg-noir-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyanic transition" placeholder="例如：終端機、單向通訊耳機">
-          </div>
-
-          <!-- 核心反轉模式 -->
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">核心敘事反轉模式</label>
-            <select id="twist-mode" class="w-full bg-noir-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-crimson transition">
-              <option value="victim-is-mastermind">假性受害者反轉：委託目標自始知情且為操盤者</option>
-              <option value="detective-is-culprit">偵探即犯人：主角受記憶竄改不知自己就是執行者</option>
-              <option value="mentor-identity-swap">前輩身分置換：冷酷前輩實為已失蹤的前搭檔</option>
-              <option value="nested-simulation">雙重盲區：裝置自始未開機，純為人性的演技試探</option>
-            </select>
-          </div>
-
-          <!-- 模式切換：即時 Mock 或 API 調用 -->
-          <div class="pt-2 border-t border-slate-800">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-medium text-slate-300">生成引擎模式</span>
-              <span id="mode-badge" class="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">內建架構引擎 (無需金鑰)</span>
-            </div>
-            
-            <details class="text-xs text-slate-400 group">
-              <summary class="cursor-pointer hover:text-slate-200 transition flex items-center gap-1 select-none">
-                <i data-lucide="key" class="w-3.5 h-3.5"></i> 切換為 Google Gemini API (選用)
-              </summary>
-              <div class="mt-2 space-y-2 p-3 bg-noir-900 rounded-lg border border-slate-800">
-                <input type="password" id="gemini-api-key" placeholder="在此輸入 Gemini API Key..." class="w-full bg-noir-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyanic">
-                <p class="text-[10px] text-slate-500 leading-relaxed">
-                  若填入金鑰，將由 Gemini 即時擴寫生成；若留空，則使用內建之專屬高品質架構推導引擎。
-                </p>
-              </div>
-            </details>
-          </div>
-
-          <!-- 生成按鈕 -->
-          <button type="submit" id="btn-generate" class="w-full mt-4 bg-gradient-to-r from-crimson to-rose-600 hover:from-rose-600 hover:to-crimson text-white font-medium py-2.5 px-4 rounded-xl shadow-lg shadow-crimson-glow flex items-center justify-center gap-2 transition active:scale-[0.98]">
-            <i data-lucide="sparkles" class="w-4 h-4"></i> 生成完整懸疑大綱與關係網
-          </button>
-        </form>
-      </div>
-
-      <!-- Quick Master Prompt Helper -->
-      <div class="glass-panel p-4 rounded-xl border border-slate-800/80">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-            <i data-lucide="terminal" class="w-3.5 h-3.5 text-amber"></i> Master Prompt 提取器
-          </h3>
-          <button id="btn-copy-prompt" class="text-[11px] text-cyanic hover:underline flex items-center gap-1">
-            <i data-lucide="copy" class="w-3 h-3"></i> 複製 Prompt
-          </button>
         </div>
-        <p class="text-[11px] text-slate-400 line-clamp-3">
-          提取已根據上述設定編譯的專業級標準 Prompt，可直接貼至 Claude 3.5 Sonnet、OpenAI o1 或 DeepSeek-R1 等外部推理 LLM 執行。
-        </p>
-      </div>
-    </aside>
+    </header>
 
-    <!-- Right Column: Outputs Dashboard (8 Cols) -->
-    <section class="lg:col-span-8 space-y-6">
+    <!-- 主要內容區 -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
 
-      <!-- Status / Title Display Card -->
-      <div id="project-header" class="glass-panel p-6 rounded-2xl relative overflow-hidden">
-        <div class="absolute -top-12 -right-12 w-48 h-48 bg-crimson/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-cyanic/10 text-cyanic border border-cyanic/30 mb-2">
-              電擊文庫風格 · 本格敘事詭計企劃
-            </span>
-            <h2 id="story-title" class="text-2xl sm:text-3xl font-bold font-title text-white tracking-wide">
-              《時限七十二小時的替身葬儀》
+        <!-- 說明橫幅 -->
+        <div class="bg-gradient-to-r from-stone-50 via-amber-50/40 to-stone-100 border border-paperBorder rounded-2xl p-5 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-sm font-semibold text-stone-800 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        純靜態原創生成技術說明
+                    </h2>
+                    <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                        無需綁定信用卡或任何 AI 金鑰！本工具透過高階程序化劇情語義網絡（Procedural Dramatic Matrix）演算，從起承轉合三幕架構、人物原創動機到伏筆回收，一鍵產出完整的小說立項大綱。所有產出均為原創模板，無著作權與版權爭議。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心輸入表單區 -->
+        <section class="bg-white rounded-2xl border border-paperBorder shadow-md p-6 sm:p-8">
+            <h2 class="text-lg font-bold text-ink border-b border-stone-100 pb-3 mb-6 flex items-center justify-between">
+                <span>故事設定與參數配置</span>
+                <span class="text-xs font-normal text-stone-400">填寫完畢後點擊生成</span>
             </h2>
-            <p id="story-subtitle" class="text-xs sm:text-sm text-slate-400 font-mono mt-1">
-              72時間の身代わり葬列 — The 72-Hour Proxy Requiem
-            </p>
-          </div>
-          <div class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-800">
-            <span class="text-[11px] text-slate-400">公平推理指數 (Fair Play)</span>
-            <span class="text-emerald-400 font-bold text-lg font-mono">100% 嚴密</span>
-          </div>
+
+            <form id="generatorForm" onsubmit="handleGenerate(event)" class="space-y-6">
+                <!-- 風格選擇 -->
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-2">小說題材風格 <span class="text-amber-700">*</span></label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3" id="genrePills">
+                        <button type="button" onclick="selectGenre('懸疑推理')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">🕵️ 懸疑推理</button>
+                        <button type="button" onclick="selectGenre('東方奇幻')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">🗡️ 東方奇幻</button>
+                        <button type="button" onclick="selectGenre('賽博朋克')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">🌆 賽博朋克</button>
+                        <button type="button" onclick="selectGenre('都會職場')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">💼 都會職場</button>
+                        <button type="button" onclick="selectGenre('科幻星際')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">🚀 科幻星際</button>
+                        <button type="button" onclick="selectGenre('校園青春')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">🎒 校園青春</button>
+                        <button type="button" onclick="selectGenre('末日倖存')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">☢️ 末日倖存</button>
+                        <button type="button" onclick="selectGenre('療癒日常')" class="genre-pill py-2 px-3 text-xs sm:text-sm rounded-xl border border-stone-200 text-stone-700 hover:border-amber-700 hover:bg-amber-50/50 transition duration-150 text-center">☕ 療癒日常</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="customGenre" placeholder="或自行輸入風格（如：蒸汽龐克、奇幻冒險、宮廷權謀...）" class="w-full text-sm px-4 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
+                    </div>
+                </div>
+
+                <!-- 篇幅與章節 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">預計篇幅總字數</label>
+                        <select id="totalWords" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 bg-white transition">
+                            <option value="30000">精悍短篇 (約 3 ~ 5 萬字)</option>
+                            <option value="100000" selected>標準中篇 (約 8 ~ 12 萬字)</option>
+                            <option value="250000">厚實長篇 (約 20 ~ 30 萬字)</option>
+                            <option value="600000">史詩大部頭 (50 萬字以上)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">章節數量 (建議 5 ~ 30 章)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="chapterCount" min="3" max="50" value="10" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
+                            <div class="flex gap-1">
+                                <button type="button" onclick="setChapters(5)" class="text-xs px-2.5 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">5章</button>
+                                <button type="button" onclick="setChapters(10)" class="text-xs px-2.5 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">10章</button>
+                                <button type="button" onclick="setChapters(20)" class="text-xs px-2.5 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">20章</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 選填：書名與主角 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-1">
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">
+                            小說名稱 <span class="text-xs font-normal text-stone-400">(選填，留空自動產出質感書名)</span>
+                        </label>
+                        <input type="text" id="novelTitle" placeholder="例如：夜幕深處的微光" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-1.5">
+                            主角姓名與特質 <span class="text-xs font-normal text-stone-400">(選填，留空隨機生成原型)</span>
+                        </label>
+                        <input type="text" id="protagonistInfo" placeholder="例如：陸遙 (冷靜克制的鐘錶修復師)" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
+                    </div>
+                </div>
+
+                <!-- 按鈕區 -->
+                <div class="pt-3 flex flex-col sm:flex-row gap-3">
+                    <button type="submit" id="submitBtn" class="flex-1 bg-stone-800 hover:bg-stone-900 active:scale-[0.99] text-white py-3.5 px-6 rounded-xl font-medium shadow-md transition duration-200 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        <span>生成原創小說企劃大綱</span>
+                    </button>
+                    <button type="button" onclick="resetForm()" class="px-5 py-3.5 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50 transition duration-150 text-sm">
+                        重設
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 狀態反饋與訊息框 -->
+        <div id="statusToast" class="hidden fixed bottom-6 right-6 z-50 bg-stone-900 text-stone-100 text-sm px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 transition duration-300">
+            <span id="toastMsg">已複製到剪貼簿！</span>
         </div>
-        <p id="story-logline" class="mt-4 text-xs sm:text-sm text-slate-300 bg-noir-800/80 p-3 rounded-lg border border-slate-800 leading-relaxed">
-          <strong>故事核心鉤子：</strong>負債少年簽下時薪僅 250 日圓的非法打工，佩戴投影神經裝置為臨終少女扮演青梅竹馬。然而在生命倒數最後時刻，他驚覺裝置自始至終並未通電，眼前的少女早在一開始就知道他是誰，並親手設下了向死神復仇的局。
-        </p>
-      </div>
 
-      <!-- Tab Navigation -->
-      <div class="flex border-b border-slate-800 space-x-2 sm:space-x-4">
-        <button data-tab="tab-characters" class="tab-btn px-4 py-2 text-xs sm:text-sm font-medium border-b-2 border-crimson text-white flex items-center gap-2 transition">
-          <i data-lucide="network" class="w-4 h-4 text-crimson"></i> 角色關係拓撲圖
-        </button>
-        <button data-tab="tab-plot" class="tab-btn px-4 py-2 text-xs sm:text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition">
-          <i data-lucide="layers" class="w-4 h-4 text-cyanic"></i> 五幕式劇情大綱
-        </button>
-        <button data-tab="tab-clues" class="tab-btn px-4 py-2 text-xs sm:text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition">
-          <i data-lucide="search" class="w-4 h-4 text-amber"></i> 本格伏筆與解謎對照
-        </button>
-      </div>
+        <!-- 結果展示區 (預設隱藏，生成後顯示) -->
+        <section id="resultSection" class="hidden space-y-8 pb-12">
 
-      <!-- Tab 1: Interactive Character Map -->
-      <div id="tab-characters" class="tab-content space-y-4">
-        <div class="glass-panel p-5 rounded-2xl">
-          <h3 class="text-sm font-bold text-slate-200 mb-3 flex items-center justify-between">
-            <span>人物關係網與雙重身分解析 (Dynamic Character Grid)</span>
-            <span class="text-[11px] text-slate-400 font-normal">點擊角色卡片可突顯其深層秘密</span>
-          </h3>
-
-          <!-- Visual Topology Card Grid -->
-          <div id="character-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <!-- Dynamically Rendered Characters Here -->
-          </div>
-
-          <!-- SVG Topology Link Visualizer -->
-          <div class="bg-noir-900 rounded-xl p-4 border border-slate-800">
-            <h4 class="text-xs font-semibold text-slate-400 mb-2 flex items-center gap-1.5">
-              <i data-lucide="git-fork" class="w-3.5 h-3.5 text-crimson"></i> 利害關係交織鏈
-            </h4>
-            <div id="relationship-text-tree" class="text-xs font-mono text-slate-300 space-y-2">
-              <!-- Rendered via JS -->
+            <!-- 頂部功能工具列 -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-paperBorder shadow-sm">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-sm font-semibold text-stone-700">小說企劃生成完成</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="copyMarkdown()" class="text-xs sm:text-sm px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-lg font-medium transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+                        複製完整 Markdown
+                    </button>
+                    <button onclick="downloadTextFile()" class="text-xs sm:text-sm px-3.5 py-2 bg-amber-800 hover:bg-amber-900 text-white rounded-lg font-medium transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        匯出企劃檔 (.txt)
+                    </button>
+                </div>
             </div>
-          </div>
+
+            <!-- 卡片 1：書籍基本資訊與主旨定位 -->
+            <div class="bg-white rounded-2xl border border-paperBorder shadow-sm p-6 sm:p-8">
+                <div class="border-b border-stone-100 pb-5 mb-5 flex flex-col md:flex-row md:items-baseline justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <span id="badgeGenre" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">題材</span>
+                            <span id="badgeScale" class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600">規模</span>
+                        </div>
+                        <h2 id="displayTitle" class="text-2xl sm:text-3xl font-bold font-book-title text-stone-900 tracking-tight"></h2>
+                    </div>
+                    <div class="text-xs sm:text-sm text-stone-500 text-left md:text-right">
+                        <p id="displayTargetWords"></p>
+                        <p id="displayPaceAnalysis" class="text-amber-800 font-medium"></p>
+                    </div>
+                </div>
+
+                <!-- 核心主旨與世界觀基底 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-stone-50/70 p-4 rounded-xl border border-stone-200/60">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1 flex items-center gap-1">
+                            🎯 核心主旨 (Theme & Premise)
+                        </h4>
+                        <p id="displayTheme" class="text-sm text-stone-800 leading-relaxed"></p>
+                    </div>
+                    <div class="bg-stone-50/70 p-4 rounded-xl border border-stone-200/60">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1 flex items-center gap-1">
+                            🌐 舞臺背景與故事母題 (Setting Tone)
+                        </h4>
+                        <p id="displaySetting" class="text-sm text-stone-800 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 2：人物設定與原創關係圖 -->
+            <div class="bg-white rounded-2xl border border-paperBorder shadow-sm p-6 sm:p-8 space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold font-book-title text-stone-900 flex items-center gap-2">
+                        <span>👥 核心角色群設定與動力關係</span>
+                    </h3>
+                    <p class="text-xs text-stone-500 mt-1">
+                        依據戲劇張力矩陣配置的主角、夥伴、導師、反對勢力與變數第三方。
+                    </p>
+                </div>
+
+                <!-- 角色卡片清單 -->
+                <div id="characterCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 動態由 JS 渲染 -->
+                </div>
+
+                <!-- 關係視覺化圖解 (純CSS/SVG) -->
+                <div class="mt-6 border border-stone-200 rounded-xl p-5 bg-gradient-to-b from-stone-50/60 to-white">
+                    <h4 class="text-xs font-bold text-stone-600 mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>
+                        角色關係張力拓撲圖 (Network Graph)
+                    </h4>
+                    <div id="relationDiagram" class="space-y-3 font-sans text-xs">
+                        <!-- 動態生成關係圖項目 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 3：章節大綱與寫作指引 -->
+            <div class="bg-white rounded-2xl border border-paperBorder shadow-sm p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
+                    <div>
+                        <h3 class="text-lg font-bold font-book-title text-stone-900">
+                            📑 章節結構化大綱與寫作指引
+                        </h3>
+                        <p class="text-xs text-stone-500 mt-0.5">
+                            依據三幕劇（啟承、激化、反轉、收束）自動分配進程與節奏權重
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleAllChapters(true)" class="text-xs px-2.5 py-1 text-stone-600 bg-stone-100 hover:bg-stone-200 rounded transition">全部展開</button>
+                        <button onclick="toggleAllChapters(false)" class="text-xs px-2.5 py-1 text-stone-600 bg-stone-100 hover:bg-stone-200 rounded transition">全部收摺</button>
+                    </div>
+                </div>
+
+                <!-- 章節摺疊列表 -->
+                <div id="chaptersContainer" class="space-y-3.5">
+                    <!-- 動態渲染各章節 -->
+                </div>
+            </div>
+
+            <!-- 卡片 4：伏筆設計與回收機制 -->
+            <div class="bg-white rounded-2xl border border-paperBorder shadow-sm p-6 sm:p-8 space-y-5">
+                <div>
+                    <h3 class="text-lg font-bold font-book-title text-stone-900 flex items-center gap-2">
+                        <span>🧩 原創伏筆埋設與回收設計範例 (Payoff Plan)</span>
+                    </h3>
+                    <p class="text-xs text-stone-500 mt-1">
+                        設計具備雙層解讀空間的細節，確保故事前後呼應、結尾具備驚喜感與合理性。
+                    </p>
+                </div>
+
+                <div id="foreshadowingContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 動態渲染伏筆 -->
+                </div>
+            </div>
+
+            <!-- 卡片 5：合規與版權聲明 -->
+            <div class="bg-amber-50/40 border border-amber-200/70 rounded-2xl p-5 text-xs text-stone-600 space-y-2">
+                <div class="flex items-center gap-2 font-bold text-amber-900">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <span>原創版權與合規宣告 (Copyright & Safety Compliance)</span>
+                </div>
+                <p class="leading-relaxed">
+                    本系統生成的內容皆由自建的組合邏輯演算激發，未包含任何現有知名動漫、小說或商業影視作品之特有名稱與專屬受保護設定。使用者對本工具生成的結構、大綱及角色設定擁有完整的創作自由與改寫使用權，無任何智慧財產權侵害風險。
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-white border-t border-paperBorder py-6 mt-12 text-center text-xs text-stone-400">
+        <div class="max-w-6xl mx-auto px-4">
+            <p>Novelis 原創小說大綱架構生成器 ｜ 輕量化單純 HTML 部署</p>
+            <p class="mt-1">為小說創作者、劇本寫手與靈感探索者提供可靠的架構起手式</p>
         </div>
-      </div>
+    </footer>
 
-      <!-- Tab 2: 5-Act Plot Progression -->
-      <div id="tab-plot" class="tab-content hidden space-y-4">
-        <div class="glass-panel p-5 rounded-2xl">
-          <h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
-            <i data-lucide="git-commit" class="w-4 h-4 text-cyanic"></i> 長篇輕小說五幕結構走向
-          </h3>
-          <div id="plot-container" class="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-800">
-            <!-- Dynamically Rendered Plot Acts -->
-          </div>
-        </div>
-      </div>
+    <!-- 核心程序化生成腳本 (Procedural Generation Engine) -->
+    <script>
+        // --- 靈感資料庫 (純原創、無版權問題) ---
+        const DB = {
+            titles: {
+                '懸疑推理': ['雨夜指針停止時', '消失的第七個密碼', '盲點中的倒影', '深淵低語之證', '未送達的遺囑', '緘默的骨牌效應', '鏡像謀殺者', '灰燼下的線索'],
+                '東方奇幻': ['斬雲記', '山海引渡人', '凌霄客的劍匣', '九重霧海尋長生', '琉璃玉階血', '封神餘灰錄', '枕上萬象境', '破荒星宿劫'],
+                '賽博朋克': ['霓虹神經網絡', '記憶黑市的駭客', '仿生人不再夢見雨', '義體鍍層下的孤火', '核心代碼裂變', '被刪除的第九特區', '零日協定', '深網沉淪之歌'],
+                '都會職場': ['逆流談判桌', '投行邊緣', '隱形天花板的裂縫', '夜色微醺時的博弈', '未曾公開的企劃案', '咖啡因與權力名片', '合約背面的餘溫', '金鑰之爭'],
+                '科幻星際': ['恆星寂滅之前', '躍遷節點上的巡航者', '深空沉默協議', '最後的碳基方舟', '星軌引力坍縮', '在銀河的邊緣播種', '外星遺蹟譯碼員', '超光速歸途'],
+                '校園青春': ['十七歲的風向儀', '夏末落下的粉筆灰', '奔向天台的平行線', '隱密的波長', '單車後座的夕陽記號', '未解開的二次方程式', '操場南側的秘密', '紙飛機的軌跡'],
+                '末日倖存': ['凍土避難所第零區', '灰霧覆蓋的最後晨曦', '遺落荒野的收音機', '拾荒者與發條植物', '輻射線外的綠洲', '生還者的信標', '廢墟上的守望塔', '黑雨季啟程'],
+                '療癒日常': ['深夜解憂焙茶所', '老街轉角的植物雜貨店', '時光縫補小館', '微風拂過的午後書店', '晴天娃娃的慢旅行', '寄往明天的溫暖明信片', '舊物裡的秘密清單', '慢火燉煮的生活']
+            },
+            names: {
+                surnames: ['陸', '顧', '沈', '林', '葉', '周', '楚', '裴', '方', '梁', '溫', '蘇', '徐', '秦', '程'],
+                firstnames: ['遙', '尋', '清越', '言深', '若愚', '子珩', '晚舟', '向晴', '慕白', '以晨', '一諾', '思遠', '天嵐', '知微', '星野', '安瀾']
+            },
+            archetypes: {
+                '懸疑推理': {
+                    theme: '在謊言與記憶的縫隙中，探討人性對「真相」的恐懼與救贖。',
+                    setting: '陰雨綿綿的北方海港城市，舊城區的老式鐘樓與現代化實驗室形成詭異反差。',
+                    roleProtagonist: '心思縝密但患有輕微感知失真的自由調查記者 / 舊物修復師',
+                    roleAlly: '看似圓滑世故、實則暗中蒐集證詞的退休法醫',
+                    roleMentor: '二十年前未破大案的主辦刑警，如今深居簡出',
+                    roleAntagonist: '表面上是德高望重的慈善家，私下操縱精密的信息掩蓋網',
+                    roleThirdParty: '持有關鍵底片的街頭流浪攝影師，立場飄忽不定'
+                },
+                '東方奇幻': {
+                    theme: '超脫既定天命的束縛，以凡人之軀直面不可違逆的法則。',
+                    setting: '靈脈枯竭的殘破九州，各大古老宗門封山自保，妖異與殘留法寶在塵世橫行。',
+                    roleProtagonist: '身負殘缺靈脈、被家族遺棄卻深諳古陣符紋的流浪修者',
+                    roleAlly: '個性直爽、背負巨大重劍的邊境守護者後裔',
+                    roleMentor: '寄宿在殘缺玉珮中、說話尖酸卻見多識廣的器靈長老',
+                    roleAntagonist: '妄圖獻祭整座州郡以重鑄登仙天梯的昔日聖徒',
+                    roleThirdParty: '行蹤飄忽的雲遊算命客，每一次交易都收取不可思議的代價'
+                },
+                '賽博朋克': {
+                    theme: '當記憶與意識皆可量化買賣，探討個體「真實自我的純粹性」。',
+                    setting: '巨型企業高聳入雲的立體巨構都市「新迦南」，底層長年不見天日，雨水混雜著化學機油味。',
+                    roleProtagonist: '遊走於法外邊界的黑市記憶清洗工，因接觸一段禁忌片段而遭通緝',
+                    roleAlly: '改裝了重型聲波義肢的底層地下酒吧老闆娘兼情報販子',
+                    roleMentor: '早期神經網絡架構的奠基科學家，如今已將意識隱匿於過時伺服器',
+                    roleAntagonist: '巨型生化企業執行長，企圖以單一集體意識覆蓋全城居民',
+                    roleThirdParty: '只遵循代碼邏輯行動的原型自主 AI，其判斷標準超越人類善惡'
+                },
+                '都會職場': {
+                    theme: '在名利與利益盤根錯節的資本競逐中，重構自我的尊嚴與職業底線。',
+                    setting: '繁華一線都市金融核心區，冷色調的玻璃帷幕大樓與深夜燈火通明的會議室。',
+                    roleProtagonist: '因堅持風險合規原則而被空降降職的資深併購總監',
+                    roleAlly: '擅長大數據探勘與輿情分析的新銳實習生，思維跳脫',
+                    roleMentor: '已退居幕後、看透行業輪迴的資深合夥人顧問',
+                    roleAntagonist: '為求短期高額回報不惜隱匿重大資產缺陷的激進投資人',
+                    roleThirdParty: '掌握企業內部核算審計關鍵報表的神秘離職財務長'
+                },
+                '科幻星際': {
+                    theme: '在宇宙的絕對冷酷面前，文明的延續仰賴微小卻堅定的同理心。',
+                    setting: '獵戶座懸臂邊緣的礦業空間站，人工重力系統時常故障，充斥星際拓荒的粗礪感。',
+                    roleProtagonist: '負責監測空間深處異常引力波的孤獨觀測員',
+                    roleAlly: '擁有精湛維修技術的退役工程艦艦長，寡言可靠',
+                    roleMentor: '畢生致力於破譯非碳基生物信號的老天文學家',
+                    roleAntagonist: '為爭奪有限躍遷燃料而實行殘酷篩選的星區警備司令',
+                    roleThirdParty: '在廢棄殖民衛星上自給自足的星際漫遊流浪群落首領'
+                },
+                '校園青春': {
+                    theme: '面對成長的迷茫與現實的重量，少年少女在理解彼此的過程中獲得勇氣。',
+                    setting: '面朝大海的南方沿海中學，夏末的蟬鳴與操場上翻飛的白色校服。',
+                    roleProtagonist: '成績中等、心思細膩但害怕引人注目的廣播社成員',
+                    roleAlly: '看似叛逆不羈、實則深藏家庭變故的天才田徑社員',
+                    roleMentor: '即將退休、總是用溫和茶香開導學生的舊圖書館管理員',
+                    roleAntagonist: '追求完美主義且過度控制學生的嚴厲年級主任',
+                    roleThirdParty: '轉學而來、帶著神祕過往且不受班級氣氛左右的插班生'
+                },
+                '末日倖存': {
+                    theme: '文明瓦解之後，重建信任遠比蒐集物資更加艱難而神聖。',
+                    setting: '永冬寒潮降臨後的廢墟地表，地底防空洞與改裝防護列車交織的生存點。',
+                    roleProtagonist: '擁有極高地形記憶與植物辨識力的末日物資勘測員',
+                    roleAlly: '擅長改裝蒸氣鍋爐與無線電通訊的堅韌技師',
+                    roleMentor: '建立起這座微型庇護所的前任老軍醫',
+                    roleAntagonist: '崇尚弱肉強食、掠奪周邊聚落的掠奪者兵團首領',
+                    roleThirdParty: '堅信北方存在未受污染綠洲的神秘單獨旅行者'
+                },
+                '療癒日常': {
+                    theme: '在步調飛快的匆忙世界裡，於一碗熱湯與日常物件中找到平靜的歸屬。',
+                    setting: '古意盎然的綠意小鎮街角，門口掛著銅鈴、飄散木質香氣的綜合工坊。',
+                    roleProtagonist: '辭去高壓工作返鄉、接手老舊雜貨鋪的年輕主理人',
+                    roleAlly: '熱愛手作甜點、總能察覺客人細微心情變化的烘焙師',
+                    roleMentor: '深居小鎮角落、精通各類傳統木雕工藝的古怪老奶奶',
+                    roleAntagonist: '打算強推商業化拆遷、將老街改建為觀光商場的開發商代表',
+                    roleThirdParty: '每天固定時間光顧、只點一杯特定茶飲的神秘背包客'
+                }
+            },
+            foreshadowingPool: [
+                {
+                    object: '一塊總是慢了七分鐘的古董懷錶',
+                    plant: '在初期情節中主角隨手調整懷錶，提及這是逝去親人唯一的遺物，但機械構造顯得特別沉重。',
+                    trigger: '中段主角遭遇危機時，金屬指針卡死在某個特定刻度，意外折射出隱藏暗格。',
+                    payoff: '終章揭露內部並非計時齒輪，而是一枚經過微雕處理的微型光學儲存晶片/密信，徹底反轉反派的身分動機。'
+                },
+                {
+                    object: '一段童年時聽過的古老歌謠或童謠',
+                    plant: '配角在無意識時哼唱的幾句怪異旋律，主角誤以為只是地方鄉土小調。',
+                    trigger: '在探索關鍵密室或解密古老機關時，音階的起伏剛好契合了石門/聲紋門鎖的震動頻率。',
+                    payoff: '高潮章節揭示歌謠正是創立者用以警示後世的防禦指令，喚醒了沉睡的解方機制。'
+                },
+                {
+                    object: '看似隨機的手部習慣性摩擦動作',
+                    plant: '某位看似正義的盟友在說出「完全信任」時，右手拇指習慣性擦過食指第二關節。',
+                    trigger: '主角在回溯多年前的重要合照與口供紀錄時，發現同樣的動作出現在關鍵嫌疑犯的身影中。',
+                    payoff: '在中後段反轉揭曉該盟友實際上正是當年偽裝逃脫的真正策劃人，內心動機浮出水面。'
+                },
+                {
+                    object: '一盆始終無法在陽光下生長的奇異乾枯植物',
+                    plant: '主角案頭放置的小盆栽，無論如何澆水施肥都呈現灰白石化狀態，被當成普通的裝飾品。',
+                    trigger: '當環境空氣被特定毒素或放射源污染時，該植物突然在黑夜中分泌出淡藍色熒光露滴。',
+                    payoff: '在生死關頭，主角意識到這不是觀賞植物，而是唯一的天然中和劑，成功挽救全員命運。'
+                }
+            ]
+        };
 
-      <!-- Tab 3: Fair-Play Mystery Clues Table -->
-      <div id="tab-clues" class="tab-content hidden space-y-4">
-        <div class="glass-panel p-5 rounded-2xl">
-          <h3 class="text-sm font-bold text-slate-200 mb-2 flex items-center gap-2">
-            <i data-lucide="shield-check" class="w-4 h-4 text-amber"></i> 本格推理公平性伏筆與反轉對照表 (Fair-Play Clue Ledger)
-          </h3>
-          <p class="text-xs text-slate-400 mb-4">
-            嚴格禁止機械降神。以下物理客觀線索在前文已全數交給讀者，符合本格推理公平原則：
-          </p>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr class="border-b border-slate-700 bg-noir-800/80 text-slate-300">
-                  <th class="p-3">編號</th>
-                  <th class="p-3">前文物理伏筆 / 客觀細節</th>
-                  <th class="p-3">讀者當下的表面解讀</th>
-                  <th class="p-3">真相揭曉時的真實本質</th>
-                  <th class="p-3">揭露幕次</th>
-                </tr>
-              </thead>
-              <tbody id="clues-table-body" class="divide-y divide-slate-800/80 text-slate-300 font-sans">
-                <!-- Dynamically Rendered Clues -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+        let currentProjectData = null;
 
-      <!-- Compliance & Fact-Checking Warning Banner (作業防扣分必備項目) -->
-      <div class="p-4 rounded-xl border border-amber/30 bg-amber/5 text-amber-200/90 flex items-start gap-3 text-xs leading-relaxed">
-        <i data-lucide="alert-triangle" class="w-5 h-5 text-amber flex-shrink-0 mt-0.5"></i>
-        <div>
-          <strong class="font-semibold block text-amber-300 mb-0.5">事實查核、媒體識讀與原創著作權合規聲明：</strong>
-          本系統生成之人物、機構、代行兼職契約、腦神經干涉裝置均屬虛構創作藝術設定。若調用外部 LLM API 生成內容，使用者應本於媒體素養與資訊工程道德，針對輸出之版權爭議、情節原創性與常識邏輯進行二次查核與法律合規審查。
-        </div>
-      </div>
-
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 bg-noir-900/60 py-4 px-6 text-center text-xs text-slate-400">
-    NarrativeForge AI — 本格輕小說架構工程系統 · 符合 GitHub Pages 靜態單頁部署規範
-  </footer>
-
-  <!-- Application Logic -->
-  <script>
-    // 預設完整的本格輕小說結構資料模型
-    const defaultData = {
-      title: "《時限七十二小時的替身葬儀》",
-      subTitleJp: "72時間の身代わり葬列 — The 72-Hour Proxy Requiem",
-      logline: "負債少年簽下時薪僅 250 日圓的非法打工，佩戴投影神經裝置為臨終少女扮演青梅竹馬。然而在生命倒數最後時刻，他驚覺裝置自始至終並未通電，眼前的少女早在一開始就知道他是誰，並親手設下了向死神復仇的局。",
-      characters: [
-        {
-          name: "雨宮 奏 (Kanade Amamiya)",
-          tag: "主角 / 新人代行員",
-          surface: "背負家計債務的高中生，自認冷漠理智，為換取醫藥費簽下時薪250日圓契約。",
-          truth: "極度害怕與他人建立聯繫，深信自己因父親過失害死他人而背負不可饒恕的原罪。",
-          accent: "border-sky-500/40 text-sky-400"
-        },
-        {
-          name: "花菱 栞 (Shiori Hanabishi)",
-          tag: "第一委託目標 / 倒數72小時千金",
-          surface: "剩餘壽命不足72小時的心臟病千金，在白鏡影響下將奏視為兒時初戀。",
-          truth: "「白鏡」自始至終未開機。她早已查出奏的身分，此委託是為引出當年的真兇並完成救贖。",
-          accent: "border-rose-500/40 text-rose-400"
-        },
-        {
-          name: "柊 司 (Tsukasa Hiiragi)",
-          tag: "監察前輩 / 冷面執行人",
-          surface: "嚴格恪守「絕不干涉委託者生死」守則的前輩，言談刻薄，負責審查奏的資格。",
-          truth: "真名為桐生蓮華。半年前為拯救他人承受因果反噬，抹去容貌與記憶後頂替了前輩身分。",
-          accent: "border-purple-500/40 text-purple-400"
-        },
-        {
-          name: "相澤 律 (Ritsu Aizawa)",
-          tag: "違禁藥劑師 / 醫學生",
-          surface: "奏的高中舊友，表面上是為花菱栞提供舒緩針劑的私人醫師。",
-          truth: "栞的合謀者。為栞提供不被夜行堂偵測的神經抑制劑，暗中推動這場向組織的告別之戰。",
-          accent: "border-emerald-500/40 text-emerald-400"
+        // 選擇風格快捷標籤
+        function selectGenre(genreName) {
+            document.querySelectorAll('.genre-pill').forEach(btn => {
+                btn.classList.remove('bg-amber-800', 'text-white', 'border-amber-800');
+                if (btn.innerText.includes(genreName)) {
+                    btn.classList.add('bg-amber-800', 'text-white', 'border-amber-800');
+                }
+            });
+            document.getElementById('customGenre').value = genreName;
         }
-      ],
-      relationships: [
-        { from: "雨宮 奏", to: "花菱 栞", desc: "【虛假的初戀】佩戴白鏡扮演其逝去的青梅竹馬 ◄► 【真實的復仇與告解】主動指定奏為代行員" },
-        { from: "雨宮 奏", to: "柊 司", desc: "【高壓考核】前輩與菜鳥新人 ◄► 【暗中救贖】視奏為過去衝動犯規的自己" },
-        { from: "花菱 栞", to: "柊 司", desc: "【血緣牽絆】同父異母姊妹，栞一眼識出被覆寫記憶後的蓮華姊姊" },
-        { from: "相澤 律", to: "花菱 栞", desc: "【共謀死局】協助隱瞞白鏡未開機的事實，提供關鍵假死與鎮定劑" }
-      ],
-      acts: [
-        {
-          act: "第一幕：起（異常契約與倒數計時）",
-          title: "雨夜中的廉價契約",
-          summary: "奏因家庭重擔被迫進入巷弄深處的「夜行堂」，在前輩柊司監督下簽署時薪250日圓的非法人力契約。首個任務是在私立療養院陪伴剩餘72小時壽命的花菱栞。當奏戴上「白鏡」後，栞熱淚盈眶地呼喚著初戀的名字。"
-        },
-        {
-          act: "第二幕：承（共鳴的假象與微小裂痕）",
-          title: "未上鎖的抽屜與失溫的指針",
-          summary: "奏一邊維持著青梅竹馬的假象，一邊逐漸被栞的堅強所吸引。然而奏在病房中意外發現了夜行堂的內部通訊代碼手冊，且栞常在奏轉身時精準遞出他習慣用的水杯——這絕非僅憑「初戀投影」能做到的事。"
-        },
-        {
-          act: "第三幕：轉·上（鏡像破裂與首層反轉）",
-          title: "冷卻的指示燈",
-          summary: "倒數第12小時，栞陷入心臟驟停。奏情急之下扯下耳後的「白鏡」，卻駭然發現裝置的電源指示燈卡榫在出廠時就已被螺絲鎖死——白鏡從未運作過！栞睜開虛弱的雙眼，平靜地叫出了奏的真名：「雨宮同學，謝謝你陪我演完這齣戲。」"
-        },
-        {
-          act: "第四幕：轉·下（深層真相與身分倒錯）",
-          title: "死神的真名",
-          summary: "前輩柊司持槍趕來制止違規，真相在此徹底掀開：栞早已知曉奏是撞死自己生母的司機之子，但她不是為了怨恨，而是要喚醒柊司。柊司正是半年前因違規而自我洗腦消去記憶的前輩「桐生蓮華」——亦是栞同父異母的親姊姊。"
-        },
-        {
-          act: "第五幕：合（最後抉擇與黎明代價）",
-          title: "晨曦中的七百五十日圓",
-          summary: "奏利用規則中「代行員可吸收殘留執念」的漏洞，自願承擔姊妹兩人間沉重的罪惡感與記憶侵蝕。栞安詳離世，柊司在廢墟中重新尋回失落的自我。黎明到來時，奏領取了扣除罰款後僅剩的750日圓微薄時薪，走入喧囂市區，走向下一個任務。"
+
+        function setChapters(count) {
+            document.getElementById('chapterCount').value = count;
         }
-      ],
-      clues: [
-        {
-          index: "01",
-          evidence: "第一幕中，白鏡戴上時耳後傳來的「微弱卡嗒聲」與始終冰冷的金屬外殼。",
-          surface: "主角以為是裝置啟動正常運轉時的微弱電流感。",
-          truth: "電源觸點早在出廠前被刻意夾入了絕緣塑膠片，根本未通電。",
-          act: "第三幕揭曉"
-        },
-        {
-          index: "02",
-          evidence: "第二幕中，栞遞熱水杯時，精確對準了奏左撇子的慣用手側。",
-          surface: "讀者以為是初戀青梅竹馬剛好也是左撇子的巧合。",
-          truth: "栞事前調查過奏的全部個人資料與生活錄像，早已知道他是誰。",
-          act: "第三幕揭曉"
-        },
-        {
-          index: "03",
-          evidence: "柊司隨身攜帶的銀色打火機底部，刻著極細小的花體縮寫「R.K.」。",
-          surface: "以為是前輩已故前搭檔遺留給他的紀念遺物。",
-          truth: "柊司即是桐生蓮華（Renge Kiryu）本人，這是她唯一未捨得銷毀的私人物品。",
-          act: "第四幕揭曉"
+
+        // 隨機填充示範資料
+        function fillRandomExample() {
+            const genres = ['懸疑推理', '東方奇幻', '賽博朋克', '都會職場', '科幻星際', '校園青春', '末日倖存', '療癒日常'];
+            const randomGenre = genres[Math.floor(Math.random() * genres.length)];
+            selectGenre(randomGenre);
+            
+            const wordsOptions = [30000, 100000, 250000];
+            document.getElementById('totalWords').value = wordsOptions[Math.floor(Math.random() * wordsOptions.length)];
+            document.getElementById('chapterCount').value = [8, 12, 16][Math.floor(Math.random() * 3)];
+            
+            const titles = DB.titles[randomGenre];
+            document.getElementById('novelTitle').value = titles[Math.floor(Math.random() * titles.length)];
+            
+            const surname = DB.names.surnames[Math.floor(Math.random() * DB.names.surnames.length)];
+            const firstname = DB.names.firstnames[Math.floor(Math.random() * DB.names.firstnames.length)];
+            document.getElementById('protagonistInfo').value = `${surname}${firstname}`;
+
+            showToast('已隨機載入題材範例！');
         }
-      ]
-    };
 
-    // Render Data into DOM
-    function renderApp(data) {
-      document.getElementById('story-title').innerText = data.title;
-      document.getElementById('story-subtitle').innerText = data.subTitleJp;
-      document.getElementById('story-logline').innerHTML = `<strong>故事核心鉤子：</strong>${data.logline}`;
+        function resetForm() {
+            document.getElementById('generatorForm').reset();
+            document.querySelectorAll('.genre-pill').forEach(btn => {
+                btn.classList.remove('bg-amber-800', 'text-white', 'border-amber-800');
+            });
+            document.getElementById('resultSection').classList.add('hidden');
+        }
 
-      // 渲染角色
-      const charContainer = document.getElementById('character-grid');
-      charContainer.innerHTML = data.characters.map(c => `
-        <div class="p-4 rounded-xl bg-noir-800/90 border ${c.accent} transition hover:bg-noir-700/80">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-bold text-slate-100 text-sm">${c.name}</h4>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">${c.tag}</span>
-          </div>
-          <p class="text-xs text-slate-300 mb-2 leading-relaxed"><strong class="text-slate-400">表層偽裝：</strong>${c.surface}</p>
-          <p class="text-xs text-slate-300 leading-relaxed border-t border-slate-700/50 pt-2"><strong class="text-amber">隱藏真相：</strong>${c.truth}</p>
-        </div>
-      `).join('');
+        function showToast(msg) {
+            const toast = document.getElementById('statusToast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2600);
+        }
 
-      // 渲染關係拓撲文字
-      const relContainer = document.getElementById('relationship-text-tree');
-      relContainer.innerHTML = data.relationships.map(r => `
-        <div class="p-2 rounded bg-noir-800/50 border border-slate-800">
-          <span class="text-cyanic font-semibold">${r.from}</span> 
-          <span class="text-slate-500">──</span> 
-          <span class="text-rose-400 font-semibold">${r.to}</span>
-          <div class="text-[11px] text-slate-400 mt-1 pl-2 border-l border-slate-700">${r.desc}</div>
-        </div>
-      `).join('');
+        // 核心生成邏輯
+        function handleGenerate(event) {
+            event.preventDefault();
 
-      // 渲染大綱
-      const plotContainer = document.getElementById('plot-container');
-      plotContainer.innerHTML = data.acts.map(a => `
-        <div class="relative pl-6">
-          <div class="absolute left-[-1.65rem] top-1.5 w-3 h-3 rounded-full bg-cyanic ring-4 ring-noir-900"></div>
-          <span class="text-[11px] font-bold uppercase tracking-wider text-cyanic">${a.act}</span>
-          <h4 class="text-sm font-bold text-white mt-0.5 mb-1">${a.title}</h4>
-          <p class="text-xs text-slate-300 leading-relaxed bg-noir-800/60 p-3 rounded-lg border border-slate-800">${a.summary}</p>
-        </div>
-      `).join('');
+            // 取得輸入值
+            let genre = document.getElementById('customGenre').value.trim();
+            if (!genre) {
+                genre = '懸疑推理';
+                selectGenre(genre);
+            }
 
-      // 渲染伏筆表
-      const cluesContainer = document.getElementById('clues-table-body');
-      cluesContainer.innerHTML = data.clues.map(c => `
-        <tr class="hover:bg-noir-800/40 transition">
-          <td class="p-3 font-mono font-bold text-cyanic">${c.index}</td>
-          <td class="p-3 text-slate-200">${c.evidence}</td>
-          <td class="p-3 text-slate-400">${c.surface}</td>
-          <td class="p-3 text-amber font-medium">${c.truth}</td>
-          <td class="p-3 text-slate-400 whitespace-nowrap">${c.act}</td>
-        </tr>
-      `).join('');
+            const totalWords = parseInt(document.getElementById('totalWords').value, 10) || 100000;
+            const chapterCount = Math.max(3, Math.min(50, parseInt(document.getElementById('chapterCount').value, 10) || 10));
+            let title = document.getElementById('novelTitle').value.trim();
+            let protag = document.getElementById('protagonistInfo').value.trim();
 
-      // 重新加載圖標
-      lucide.createIcons();
-    }
+            // 若留空則智能匹配
+            const baseArchetype = DB.archetypes[genre] || DB.archetypes['懸疑推理'];
+            
+            if (!title) {
+                const list = DB.titles[genre] || ['命運的交匯點', '沉寂之海的回音', '最後的晨星契約'];
+                title = list[Math.floor(Math.random() * list.length)];
+            }
 
-    // Tab 切換事件綁定
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('border-crimson', 'text-white');
-          b.classList.add('border-transparent', 'text-slate-400');
+            if (!protag) {
+                const s = DB.names.surnames[Math.floor(Math.random() * DB.names.surnames.length)];
+                const f = DB.names.firstnames[Math.floor(Math.random() * DB.names.firstnames.length)];
+                protag = `${s}${f}`;
+            }
+
+            // 人物設定生成
+            const characters = [
+                {
+                    role: '主角 (Protagonist)',
+                    name: protag,
+                    trait: baseArchetype.roleProtagonist,
+                    tag: '核心視角 / 成長弧光',
+                    tagBg: 'bg-amber-100 text-amber-800'
+                },
+                {
+                    role: '核心盟友 (Ally / Partner)',
+                    name: generateCharacterName(),
+                    trait: baseArchetype.roleAlly,
+                    tag: '互補技能 / 道德拉扯',
+                    tagBg: 'bg-emerald-100 text-emerald-800'
+                },
+                {
+                    role: '引導者 / 貴人 (Mentor)',
+                    name: generateCharacterName(),
+                    trait: baseArchetype.roleMentor,
+                    tag: '關鍵線索 / 理念傳承',
+                    tagBg: 'bg-blue-100 text-blue-800'
+                },
+                {
+                    role: '對立面 / 宿敵 (Antagonist)',
+                    name: generateCharacterName(),
+                    trait: baseArchetype.roleAntagonist,
+                    tag: '利益衝突 / 理念極端',
+                    tagBg: 'bg-rose-100 text-rose-800'
+                },
+                {
+                    role: '變數第三方 (Wildcard)',
+                    name: generateCharacterName(),
+                    trait: baseArchetype.roleThirdParty,
+                    tag: '情報天平 / 局勢逆轉',
+                    tagBg: 'bg-purple-100 text-purple-800'
+                }
+            ];
+
+            // 章節結構按三幕劇 (Hero's Journey / Three-Act Structure) 演算分派
+            const chapters = generateChapterOutlines(chapterCount, totalWords, genre, characters, title);
+
+            // 伏筆挑選
+            const shuffledForeshadowing = [...DB.foreshadowingPool].sort(() => 0.5 - Math.random()).slice(0, 3);
+            const foreshadowings = shuffledForeshadowing.map((item, idx) => {
+                const plantChap = Math.max(1, Math.floor(chapterCount * 0.15) + idx);
+                const triggerChap = Math.floor(chapterCount * 0.55) + idx;
+                const payoffChap = Math.max(plantChap + 2, Math.floor(chapterCount * 0.85) + (idx % 2));
+                return {
+                    ...item,
+                    plantChap: Math.min(plantChap, chapterCount - 2),
+                    triggerChap: Math.min(triggerChap, chapterCount - 1),
+                    payoffChap: Math.min(payoffChap, chapterCount)
+                };
+            });
+
+            // 儲存當前專案資料
+            currentProjectData = {
+                title,
+                genre,
+                totalWords,
+                chapterCount,
+                theme: baseArchetype.theme,
+                setting: baseArchetype.setting,
+                characters,
+                chapters,
+                foreshadowings,
+                paceAnalysis: calculatePaceAnalysis(totalWords, chapterCount)
+            };
+
+            // 渲染至 UI
+            renderResults(currentProjectData);
+
+            // 滾動至成果區
+            const resultSection = document.getElementById('resultSection');
+            resultSection.classList.remove('hidden');
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+            showToast('大綱企劃已成功生成！');
+        }
+
+        function generateCharacterName() {
+            const s = DB.names.surnames[Math.floor(Math.random() * DB.names.surnames.length)];
+            const f = DB.names.firstnames[Math.floor(Math.random() * DB.names.firstnames.length)];
+            return `${s}${f}`;
+        }
+
+        function calculatePaceAnalysis(words, chapters) {
+            const avg = Math.round(words / chapters);
+            let paceTag = "節奏勻稱流暢";
+            if (avg < 3000) paceTag = "緊湊快節奏（網文/輕小說風格）";
+            else if (avg > 8000) paceTag = "沉穩厚實（傳統文學/經典長篇敘事）";
+            return `全篇預計 ${words.toLocaleString()} 字 ｜ 平均每章約 ${avg.toLocaleString()} 字 ｜ ${paceTag}`;
+        }
+
+        // 動態生成章節演算法
+        function generateChapterOutlines(count, totalWords, genre, chars, bookTitle) {
+            const avgWord = Math.round(totalWords / count);
+            const chapters = [];
+
+            // 核心角色引用
+            const p = chars[0].name;
+            const ally = chars[1].name;
+            const mentor = chars[2].name;
+            const ant = chars[3].name;
+            const third = chars[4].name;
+
+            for (let i = 1; i <= count; i++) {
+                const progress = i / count;
+                let act = "";
+                let actBadge = "";
+                let title = "";
+                let coreEvent = "";
+                let conflict = "";
+                let tip = "";
+
+                if (progress <= 0.25) {
+                    // 第一幕：起（建置、引發事件）
+                    act = "第一幕：啟程與秩序裂痕";
+                    actBadge = "bg-sky-50 text-sky-700 border-sky-200";
+                    if (i === 1) {
+                        title = `常軌的終結與異常預兆`;
+                        coreEvent = `介紹主角【${p}】的日常生活環境與潛在困境；一次看似尋常的委託/遭遇中，意外觸發了違背常理的異常細節。`;
+                        conflict = `主角內心對改變的抗拒與外界威脅迫近的矛盾。`;
+                        tip = `重在刻畫主角的「核心性格缺點」與日常質感，埋下第一條不起眼的伏筆。`;
+                    } else {
+                        title = `跨越邊界與初步同盟`;
+                        coreEvent = `危機進一步升級，主角被迫離開舒適圈，在尋找答案過程中結識了【${ally}】。兩人性格衝突但目標暫時一致。`;
+                        conflict = `信任尚未建立，彼此隱瞞了部分真實目的。`;
+                        tip = `加強兩人對話中的機鋒，透過行動展示同伴的專業能力。`;
+                    }
+                } else if (progress <= 0.60) {
+                    // 第二幕前半：承（試煉、上升行動）
+                    act = "第二幕（上）：深入險境與對抗升級";
+                    actBadge = "bg-amber-50 text-amber-700 border-amber-200";
+                    if (progress <= 0.40) {
+                        title = `導師指引與拼圖的一角`;
+                        coreEvent = `在【${mentor}】的提點或庇護下，主角一行人逐漸接近事件的核心秘密，但同時也引起了反派勢力【${ant}】的直接注意。`;
+                        conflict = `外在追逐或審查壓力加大，內部資源開始匱乏。`;
+                        tip = `此時應深化世界觀設定，擴展讀者對整座舞臺潛規則的理解。`;
+                    } else {
+                        title = `虛妄的勝利與中點轉折`;
+                        coreEvent = `主角團隊策劃了一次大膽的反擊，成功取得關鍵情報或道具，看似迎來曙光；然而神秘第三方【${third}】暗中干預了局勢。`;
+                        conflict = `勝利背後埋藏著代價，局勢實則滑向更危險的深淵。`;
+                        tip = `設計「假高潮」（False Peak），讓讀者先體會興奮，隨後立即迎來冷水。`;
+                    }
+                } else if (progress <= 0.85) {
+                    // 第二幕後半：轉（至暗時刻、危機反撲）
+                    act = "第二幕（下）：深淵低谷與真相撕裂";
+                    actBadge = "bg-rose-50 text-rose-700 border-rose-200";
+                    if (progress <= 0.75) {
+                        title = `信任碎裂與代價償還`;
+                        coreEvent = `反對勢力【${ant}】發動毀滅性反撲，主角團隊的隱密據點暴露，【${mentor}】被迫退場或付出沉重代價，團隊陷入信任危機。`;
+                        conflict = `核心價值觀遭受打擊，主角陷入「全盤皆輸」的絕望自責中。`;
+                        tip = `此為故事的「靈魂暗夜（Dark Night of the Soul）」，將主角逼入絕境以逼出真正覺醒。`;
+                    } else {
+                        title = `逆境重組與置之死地`;
+                        coreEvent = `主角【${p}】在絕境中釐清了真相的最後盲點，決定不再逃避內心的創傷，重新整合【${ally}】的支援，制定破釜沉舟之策。`;
+                        conflict = `敵我實力懸殊，勝率微乎其微的心理壓力。`;
+                        tip = `節奏應加快，多線敘事在此處開始收束，為最後大決戰蓄積張力。`;
+                    }
+                } else {
+                    // 第三幕：合（決戰、收束、餘波）
+                    act = "第三幕：最終對決與秩序重塑";
+                    actBadge = "bg-purple-50 text-purple-700 border-purple-200";
+                    if (i === count) {
+                        title = `餘波散盡與新的晨曦`;
+                        coreEvent = `塵埃落定，世界雖然無法完全回到過去，但每個人都找到了全新的位置。主角【${p}】完成了自我蛻變，凝望遠方。`;
+                        conflict = `對逝去之物的緬懷與對未來的釋懷。`;
+                        tip = `給予讀者情緒落地（catharsis）的空間，呼應第一章的開篇意象。`;
+                    } else {
+                        title = `交鋒的頂點與真相大白`;
+                        coreEvent = `與【${ant}】展開最後的信念交鋒，先前埋設的關鍵物件/伏筆在此刻被精妙引爆，局勢在毫釐之間逆轉。`;
+                        conflict = `生死決斷與終極正義的裁奪。`;
+                        tip = `保持動作與心態描寫的張力，避免機械降神（Deus ex machina），讓勝利源自主角前期的鋪墊與意志。`;
+                    }
+                }
+
+                // 微調各章字數有些微起伏，更符合真實寫作
+                const wordVariance = Math.round((Math.sin(i * 1.5) * 0.15 + 1) * avgWord);
+
+                chapters.push({
+                    chapterNumber: i,
+                    title: `第 ${i} 章：${title}`,
+                    wordTarget: wordVariance,
+                    act,
+                    actBadge,
+                    coreEvent,
+                    conflict,
+                    tip
+                });
+            }
+
+            return chapters;
+        }
+
+        // 渲染結果畫面
+        function renderResults(data) {
+            document.getElementById('displayTitle').innerText = data.title;
+            document.getElementById('badgeGenre').innerText = data.genre;
+            document.getElementById('badgeScale').innerText = `${data.chapterCount} 個章節規劃`;
+            document.getElementById('displayTargetWords').innerText = `目標總字數：約 ${data.totalWords.toLocaleString()} 字`;
+            document.getElementById('displayPaceAnalysis').innerText = data.paceAnalysis;
+            document.getElementById('displayTheme').innerText = data.theme;
+            document.getElementById('displaySetting').innerText = data.setting;
+
+            // 渲染角色卡片
+            const charContainer = document.getElementById('characterCardsContainer');
+            charContainer.innerHTML = '';
+            data.characters.forEach(c => {
+                const card = document.createElement('div');
+                card.className = "bg-stone-50 border border-stone-200/80 rounded-xl p-4 flex flex-col justify-between hover:shadow-sm transition";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-1 mb-2">
+                            <span class="text-xs font-bold text-stone-500 uppercase">${c.role}</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded-full font-medium ${c.tagBg}">${c.tag}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-stone-900 font-book-title">${c.name}</h4>
+                        <p class="text-xs text-stone-600 mt-2 leading-relaxed">${c.trait}</p>
+                    </div>
+                `;
+                charContainer.appendChild(card);
+            });
+
+            // 渲染角色關係圖 (拓撲)
+            const relationDiagram = document.getElementById('relationDiagram');
+            const [p, ally, mentor, ant, third] = data.characters;
+            relationDiagram.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-stone-800">${p.name}</span>
+                            <span class="text-stone-400">⟷</span>
+                            <span class="font-bold text-stone-800">${ally.name}</span>
+                        </div>
+                        <span class="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">互相託付與性格互補</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-stone-800">${p.name}</span>
+                            <span class="text-stone-400">⟵</span>
+                            <span class="font-bold text-stone-800">${mentor.name}</span>
+                        </div>
+                        <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">受贈關鍵技藝與理念傳承</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-stone-800">${p.name}</span>
+                            <span class="text-rose-500 font-bold">⚡</span>
+                            <span class="font-bold text-stone-800">${ant.name}</span>
+                        </div>
+                        <span class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded border border-rose-200">宿命衝突・道德核心截然對立</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-stone-800">${third.name}</span>
+                            <span class="text-amber-500">❓</span>
+                            <span class="text-stone-600 font-medium">全體局勢</span>
+                        </div>
+                        <span class="text-[11px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200">情報交易者・隨利害動搖天平</span>
+                    </div>
+                </div>
+            `;
+
+            // 渲染章節列表
+            const chapContainer = document.getElementById('chaptersContainer');
+            chapContainer.innerHTML = '';
+            data.chapters.forEach(chap => {
+                const item = document.createElement('div');
+                item.className = "border border-stone-200 rounded-xl overflow-hidden transition bg-stone-50/40 hover:bg-stone-50";
+                item.innerHTML = `
+                    <button type="button" onclick="toggleChapter(${chap.chapterNumber})" class="w-full text-left p-4 flex items-center justify-between gap-3 focus:outline-none">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs px-2 py-0.5 rounded-full border ${chap.actBadge}">${chap.act}</span>
+                            <h4 class="font-bold text-stone-800 text-sm sm:text-base font-book-title">${chap.title}</h4>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="text-xs text-stone-400 font-mono">約 ${chap.wordTarget.toLocaleString()} 字</span>
+                            <svg id="arrow-${chap.chapterNumber}" class="w-4 h-4 text-stone-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </button>
+                    <div id="content-${chap.chapterNumber}" class="hidden px-4 pb-4 pt-1 border-t border-stone-100 text-xs sm:text-sm space-y-2 bg-white">
+                        <div class="mt-2">
+                            <span class="font-bold text-stone-700">【核心事件】</span>
+                            <span class="text-stone-600">${chap.coreEvent}</span>
+                        </div>
+                        <div>
+                            <span class="font-bold text-rose-800">【矛盾衝突】</span>
+                            <span class="text-stone-600">${chap.conflict}</span>
+                        </div>
+                        <div class="bg-amber-50/60 p-2.5 rounded-lg border border-amber-100/80 text-stone-700">
+                            <span class="font-bold text-amber-900">💡 撰寫指引 (Writing Tip)：</span>
+                            ${chap.tip}
+                        </div>
+                    </div>
+                `;
+                chapContainer.appendChild(item);
+            });
+
+            // 渲染伏筆卡片
+            const fsContainer = document.getElementById('foreshadowingContainer');
+            fsContainer.innerHTML = '';
+            data.foreshadowings.forEach((fs, i) => {
+                const fsCard = document.createElement('div');
+                fsCard.className = "bg-stone-50 border border-stone-200/90 rounded-xl p-4 flex flex-col justify-between text-xs space-y-3";
+                fsCard.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between border-b border-stone-200/70 pb-2 mb-2">
+                            <span class="font-bold text-amber-900">伏筆線索 #${i + 1}</span>
+                            <span class="text-[10px] bg-stone-200/70 text-stone-700 px-2 py-0.5 rounded">信號道具</span>
+                        </div>
+                        <h5 class="font-bold text-stone-800 text-sm mb-2">${fs.object}</h5>
+                        <p class="text-stone-600 mb-2"><strong class="text-stone-700">🌱 埋設 (第 ${fs.plantChap} 章)：</strong>${fs.plant}</p>
+                        <p class="text-stone-600 mb-2"><strong class="text-stone-700">⚡ 異動 (第 ${fs.triggerChap} 章)：</strong>${fs.trigger}</p>
+                    </div>
+                    <div class="bg-amber-100/50 p-2.5 rounded-lg border border-amber-200 text-amber-950">
+                        <strong>🎯 揭露與回收 (第 ${fs.payoffChap} 章)：</strong>${fs.payoff}
+                    </div>
+                `;
+                fsContainer.appendChild(fsCard);
+            });
+        }
+
+        // 章節收摺邏輯
+        function toggleChapter(num) {
+            const content = document.getElementById(`content-${num}`);
+            const arrow = document.getElementById(`arrow-${num}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+
+        function toggleAllChapters(expand) {
+            if (!currentProjectData) return;
+            currentProjectData.chapters.forEach(c => {
+                const content = document.getElementById(`content-${c.chapterNumber}`);
+                const arrow = document.getElementById(`arrow-${c.chapterNumber}`);
+                if (expand) {
+                    content.classList.remove('hidden');
+                    arrow.classList.add('rotate-180');
+                } else {
+                    content.classList.add('hidden');
+                    arrow.classList.remove('rotate-180');
+                }
+            });
+        }
+
+        // 轉換為 Markdown 文字
+        function buildMarkdownText(data) {
+            let md = `# 《${data.title}》小說立項企劃書\n\n`;
+            md += `> **風格定位**：${data.genre} ｜ **預計規模**：${data.chapterCount} 章（約 ${data.totalWords.toLocaleString()} 字）\n`;
+            md += `> **節奏步調**：${data.paceAnalysis}\n\n`;
+            md += `---\n\n`;
+            md += `## 一、 核心主旨與世界觀\n\n`;
+            md += `- **核心主題**：${data.theme}\n`;
+            md += `- **舞臺背景**：${data.setting}\n\n`;
+            md += `---\n\n`;
+            md += `## 二、 核心人物網絡與動力矩陣\n\n`;
+            data.characters.forEach(c => {
+                md += `### ${c.role}：${c.name}\n`;
+                md += `- **定位標籤**：${c.tag}\n`;
+                md += `- **人設特質**：${c.trait}\n\n`;
+            });
+            md += `---\n\n`;
+            md += `## 三、 章節細化大綱與寫作指引\n\n`;
+            data.chapters.forEach(chap => {
+                md += `### ${chap.title} (${chap.act})\n`;
+                md += `- **建議字數**：約 ${chap.wordTarget.toLocaleString()} 字\n`;
+                md += `- **核心事件**：${chap.coreEvent}\n`;
+                md += `- **衝突轉折**：${chap.conflict}\n`;
+                md += `- **撰寫指引**：${chap.tip}\n\n`;
+            });
+            md += `---\n\n`;
+            md += `## 四、 伏筆與回收機制 (Payoff Matrix)\n\n`;
+            data.foreshadowings.forEach((fs, i) => {
+                md += `#### 伏筆 #${i + 1}：${fs.object}\n`;
+                md += `- **埋設章節**：第 ${fs.plantChap} 章 ｜ ${fs.plant}\n`;
+                md += `- **觸發提示**：第 ${fs.triggerChap} 章 ｜ ${fs.trigger}\n`;
+                md += `- **終極回收**：第 ${fs.payoffChap} 章 ｜ ${fs.payoff}\n\n`;
+            });
+            md += `---\n\n`;
+            md += `*本企劃大綱由 Novelis 原創架構引擎純客戶端生成，自由授權改寫創作。*`;
+            return md;
+        }
+
+        // 複製為 Markdown
+        function copyMarkdown() {
+            if (!currentProjectData) return;
+            const md = buildMarkdownText(currentProjectData);
+
+            const tempInput = document.createElement('textarea');
+            tempInput.value = md;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast('已成功複製完整 Markdown 企劃書！');
+        }
+
+        // 下載文字檔
+        function downloadTextFile() {
+            if (!currentProjectData) return;
+            const md = buildMarkdownText(currentProjectData);
+            const blob = new Blob([md], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentProjectData.title}_小說大綱企劃.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('已開始下載企劃檔案！');
+        }
+
+        // 頁面載入時預先載入一組示範內容
+        window.addEventListener('DOMContentLoaded', () => {
+            selectGenre('懸疑推理');
         });
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-
-        btn.classList.add('border-crimson', 'text-white');
-        btn.classList.remove('border-transparent', 'text-slate-400');
-        const targetId = btn.getAttribute('data-tab');
-        document.getElementById(targetId).classList.remove('hidden');
-      });
-    });
-
-    // 表單提交事件
-    document.getElementById('generator-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const job = document.getElementById('job-title').value;
-      const wage = document.getElementById('wage').value;
-      const limit = document.getElementById('time-limit').value;
-      const device = document.getElementById('device-name').value;
-
-      // 產生更新後之即時大綱
-      const dynamicData = JSON.parse(JSON.stringify(defaultData));
-      dynamicData.logline = `主角在人生絕境中接受了時薪【${wage}】的「${job}」契約。佩戴【${device}】在【${limit}】內陪伴目標，最後卻發現一切的規則與記憶皆被精心算計。`;
-      dynamicData.acts[0].summary = `主角簽下時薪【${wage}】的非法人力契約，佩戴【${device}】進入現場，面對時限【${limit}】的終局目標。`;
-
-      renderApp(dynamicData);
-      alert('已依據最新參數重新編譯輕小說大綱與伏筆對照表！');
-    });
-
-    // 複製 Master Prompt 按鈕
-    document.getElementById('btn-copy-prompt').addEventListener('click', () => {
-      const job = document.getElementById('job-title').value;
-      const wage = document.getElementById('wage').value;
-      const limit = document.getElementById('time-limit').value;
-      const device = document.getElementById('device-name').value;
-
-      const masterPrompt = `# Role: 暢銷日系輕小說作家兼本格推理故事架構師
-請以本格敘事詭計與青春殘酷胃痛為基調，為我原創一部完整的長篇輕小說大綱。
-
-【核心限制】
-1. 100% 原創，嚴禁抄襲既有作品。
-2. 遵守本格推理「公平原則（Fair Play）」，嚴禁機械降神。
-3. 核心機制：時薪為【${wage}】的非法打工【${job}】，期限為【${limit}】。
-4. 核心道具：需佩戴【${device}】產生認知投影，且背後暗藏身分對調或未通電之伏筆。
-
-【請輸出】
-1. 完整五幕式分章大綱走向（起承轉合）。
-2. 4位核心人物之雙重身分（表面偽裝 vs 隱藏真相）與關係網絡。
-3. 至少3個在前文已給出的客觀物理伏筆與反轉對照表。`;
-
-      navigator.clipboard.writeText(masterPrompt).then(() => {
-        alert('Master Prompt 已複製至剪貼簿！可直接貼至 Claude 3.5 Sonnet、OpenAI o1 或 DeepSeek-R1 執行。');
-      });
-    });
-
-    // 匯出 Markdown 功能
-    document.getElementById('btn-export-md').addEventListener('click', () => {
-      const content = `# ${defaultData.title}
-${defaultData.subTitleJp}
-
-> **Logline**: ${defaultData.logline}
-
-## 角色關係
-${defaultData.characters.map(c => `### ${c.name} (${c.tag})\n- 表層偽裝：${c.surface}\n- 隱藏真相：${c.truth}\n`).join('\n')}
-
-## 五幕大綱
-${defaultData.acts.map(a => `### ${a.act}：${a.title}\n${a.summary}\n`).join('\n')}
-
-## 本格伏筆對照
-| 編號 | 客觀線索 | 表面解讀 | 真實真相 |
-|---|---|---|---|
-${defaultData.clues.map(c => `| ${c.index} \vert{}${c.evidence} | ${c.surface} \vert{}${c.truth} |`).join('\n')}
-`;
-      const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'narrative-outline.md';
-      a.click();
-    });
-
-    // 匯出 JSON 功能
-    document.getElementById('btn-export-json').addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(defaultData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'narrative-outline.json';
-      a.click();
-    });
-
-    // 初始化渲染
-    window.addEventListener('DOMContentLoaded', () => {
-      renderApp(defaultData);
-    });
-  </script>
+    </script>
 </body>
 </html>
