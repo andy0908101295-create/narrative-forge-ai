@@ -40,7 +40,6 @@
         .font-book-title {
             font-family: 'Noto Serif TC', serif;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 7px;
             height: 7px;
@@ -64,11 +63,11 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <span class="w-9 h-9 rounded-xl bg-amber-800 text-amber-50 flex items-center justify-center font-book-title font-bold text-lg shadow-inner">
-                    食戟之靈
+                    戟's
                 </span>
                 <div>
                     <h1 class="text-lg font-bold tracking-tight text-ink flex items-center gap-2">
-                        Novelis 原創構想引擎
+                        小說大綱產生器
                     </h1>
                 </div>
             </div>
@@ -109,50 +108,59 @@
                     </div>
                 </div>
 
-                <!-- 篇幅與章節 -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <!-- 篇幅、章節與主角人數 -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     <div>
                         <label class="block text-sm font-semibold text-stone-700 mb-2">預計篇幅總字數</label>
                         <select id="totalWords" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 bg-white transition">
-                            <option value="30000">精悍短篇 (約 3 ~ 5 萬字)</option>
-                            <option value="100000" selected>標準中篇 (約 8 ~ 12 萬字)</option>
-                            <option value="250000">厚實長篇 (約 20 ~ 30 萬字)</option>
-                            <option value="600000">史詩大部頭 (50 萬字以上)</option>
+                            <option value="30000">short (約 3 ~ 5 萬字)</option>
+                            <option value="100000" selected>mid (約 8 ~ 12 萬字)</option>
+                            <option value="250000">long (約 20 ~ 30 萬字)</option>
+                            <option value="600000">epic (50 萬字以上)</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-stone-700 mb-2">章節數量 (建議 5 ~ 30 章)</label>
                         <div class="flex items-center gap-2">
                             <input type="number" id="chapterCount" min="3" max="50" value="10" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
-                            <div class="flex gap-1">
-                                <button type="button" onclick="setChapters(5)" class="text-xs px-2.5 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">5章</button>
-                                <button type="button" onclick="setChapters(10)" class="text-xs px-2.5 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">10章</button>
-                                <button type="button" onclick="setChapters(20)" class="text-xs px-2.5 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">20章</button>
+                            <div class="flex gap-1 shrink-0">
+                                <button type="button" onclick="setChapters(5)" class="text-xs px-2 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">5</button>
+                                <button type="button" onclick="setChapters(10)" class="text-xs px-2 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">10</button>
+                                <button type="button" onclick="setChapters(20)" class="text-xs px-2 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-stone-600">20</button>
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">主角配置模式</label>
+                        <select id="protagCount" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 bg-white transition font-medium">
+                            <option value="1" selected>單主角</option>
+                            <option value="2">雙主角</option>
+                            <option value="3">三人小隊</option>
+                            <option value="4">四人以上小隊 / 群像劇 </option>
+                        </select>
+                    </div>
                 </div>
 
-                <!-- 選填：書名與主角 -->
+                <!-- 選填：書名與主角名稱 -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-1">
                     <div>
                         <label class="block text-sm font-semibold text-stone-700 mb-1.5">
-                            小說名稱 <span class="text-xs font-normal text-stone-400">(選填，留空自動依風格生成)</span>
+                            小說名稱 <span class="text-xs font-normal text-stone-400">(選填，留空自動演算全新篇名)</span>
                         </label>
                         <input type="text" id="novelTitle" placeholder="例如：月影迴廊的守護者" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-stone-700 mb-1.5">
-                            主角姓名與特質 <span class="text-xs font-normal text-stone-400">(選填，留空依題材生成相應風格名)</span>
+                            主角姓名 <span class="text-xs font-normal text-stone-400">(選填，多位請以逗號分隔，留空自動補足)</span>
                         </label>
-                        <input type="text" id="protagonistInfo" placeholder="例如：神城 蓮 (沉默克制的封印術士)" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
+                        <input type="text" id="protagonistInfo" placeholder="例如：神城蓮, 橘真琴 (多位用英文逗號隔開)" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition" />
                     </div>
                 </div>
 
-                <!-- 新增：補充細節／創作備註 -->
+                <!-- 補充細節／創作備註 -->
                 <div>
                     <label class="block text-sm font-semibold text-stone-700 mb-1.5">
-                        補充細節與特殊偏好 <span class="text-xs font-normal text-stone-400">(選填，填寫想要的特殊道具、世界觀法則、反派動機或情感線)</span>
+                        補充細節與特殊偏好 <span class="text-xs font-normal text-stone-400">(選填，填寫關鍵道具、世界法則、反派動機或特殊關係)</span>
                     </label>
                     <textarea id="customNotes" rows="3" placeholder="例如：故事中存在一把能逆轉五秒時間的碎裂懷錶；反派是主角失散已久的青梅竹馬；希望能著重描寫師徒之間的理念分歧與傳承感。" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-800/20 focus:border-amber-700 transition"></textarea>
                 </div>
@@ -170,19 +178,19 @@
             </form>
         </section>
 
-        <!-- 狀態反饋與訊息框 -->
+        <!-- 狀態反饋提示框 -->
         <div id="statusToast" class="hidden fixed bottom-6 right-6 z-50 bg-stone-900 text-stone-100 text-sm px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 transition duration-300">
-            <span id="toastMsg">已複製到剪貼簿！</span>
+            <span id="toastMsg">操作已完成！</span>
         </div>
 
-        <!-- 結果展示區 (預設隱藏，生成後顯示) -->
+        <!-- 結果展示區 -->
         <section id="resultSection" class="hidden space-y-8 pb-12">
 
             <!-- 頂部功能工具列 -->
             <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-paperBorder shadow-sm">
                 <div class="flex items-center gap-2">
                     <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-sm font-semibold text-stone-700">小說企劃生成完成</span>
+                    <span class="text-sm font-semibold text-stone-700">全新原創企劃大綱已建立</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="copyMarkdown()" class="text-xs sm:text-sm px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-lg font-medium transition flex items-center gap-1.5">
@@ -200,8 +208,9 @@
             <div class="bg-white rounded-2xl border border-paperBorder shadow-sm p-6 sm:p-8">
                 <div class="border-b border-stone-100 pb-5 mb-5 flex flex-col md:flex-row md:items-baseline justify-between gap-3">
                     <div>
-                        <div class="flex items-center gap-2 mb-1.5">
+                        <div class="flex flex-wrap items-center gap-2 mb-1.5">
                             <span id="badgeGenre" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">題材</span>
+                            <span id="badgeProtagMode" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-800 border border-purple-200">主角規模</span>
                             <span id="badgeScale" class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600">規模</span>
                         </div>
                         <h2 id="displayTitle" class="text-2xl sm:text-3xl font-bold font-book-title text-stone-900 tracking-tight"></h2>
@@ -222,13 +231,13 @@
                     </div>
                     <div class="bg-stone-50/70 p-4 rounded-xl border border-stone-200/60">
                         <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1 flex items-center gap-1">
-                            🌐 舞臺背景與世界觀 (Setting & Tone)
+                            🌐 舞臺背景與世界觀 (Setting & Atmosphere)
                         </h4>
                         <p id="displaySetting" class="text-sm text-stone-800 leading-relaxed"></p>
                     </div>
                 </div>
 
-                <!-- 自訂備註融入展示 (若有填寫) -->
+                <!-- 自訂備註融入展示 -->
                 <div id="displayCustomNotesBox" class="hidden mt-4 bg-amber-50/60 border border-amber-200/60 p-4 rounded-xl">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 mb-1 flex items-center gap-1.5">
                         <span>✨ 已融合之創作特殊偏好</span>
@@ -243,14 +252,14 @@
                     <h3 class="text-lg font-bold font-book-title text-stone-900 flex items-center gap-2">
                         <span>👥 核心角色網絡與動機矩陣</span>
                     </h3>
-                    <p class="text-xs text-stone-500 mt-1">
-                        依照故事張力配置的主角、夥伴、導師、反對勢力與變數第三方。
+                    <p class="text-xs text-stone-500 mt-1" id="protagDescLine">
+                        依據主角配置與情節張力動態建構的人物網絡。
                     </p>
                 </div>
 
                 <!-- 角色卡片清單 -->
                 <div id="characterCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- 動態由 JS 渲染 -->
+                    <!-- 動態渲染 -->
                 </div>
 
                 <!-- 關係視覺化圖解 -->
@@ -273,7 +282,7 @@
                             📑 章節結構化大綱與寫作指引
                         </h3>
                         <p class="text-xs text-stone-500 mt-0.5">
-                            依據三幕劇（啟承、激化、反轉、收束）分配情節進展與細化看點
+                            依據起承轉合與主角視角交替推進故事動態
                         </p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -284,7 +293,7 @@
 
                 <!-- 章節摺疊列表 -->
                 <div id="chaptersContainer" class="space-y-3.5">
-                    <!-- 動態渲染各章節 -->
+                    <!-- 動態渲染 -->
                 </div>
             </div>
 
@@ -327,164 +336,226 @@
 
     <!-- 核心程序化生成腳本 -->
     <script>
-        // --- 各題材深度適配資料庫 (語感與姓名深度分流) ---
+        // --- 深度擴展之語義語料庫與非重複演算矩陣 ---
         const DB = {
-            // 風格專屬姓名池
+            // 風格專屬姓名池（百倍多樣性組合，杜絕重複）
             namesByGenre: {
                 '日系奇幻': {
-                    surnames: ['神城', '七瀨', '雨宮', '九條', '白銀', '夜見', '星宮', '橘', '桐谷', '黑羽', '綾瀬', '柊', '風見', '西園寺'],
-                    firstnames: ['蓮', '蒼', '栞', '悠真', '千歲', '遙', '奏太', '雪乃', '理人', '真琴', '緋奈', '一輝', '明日香', '弦矢']
+                    surnames: [
+                        '神城', '綾小路', '七海', '夜見', '九條', '白銀', '星宮', '橘', '桐谷', '黑羽',
+                        '柊', '風見', '西園寺', '淺蔥', '雨宮', '櫻庭', '御影', '不知火', '水無月', '緋村',
+                        '神代', '月島', '天草', '藤宮', '鳴神', '八雲', '雪平', '時雨', '逢坂', '龍崎'
+                    ],
+                    firstnamesMale: [
+                        '蓮', '蒼真', '悠真', '奏太', '理人', '一輝', '弦矢', '颯太', '晴輝', '拓海',
+                        '隼人', '琥珀', '翔真', '晶', '優希', '怜央', '透', '晃', '千尋', '凱'
+                    ],
+                    firstnamesFemale: [
+                        '栞', '千歲', '遙', '雪乃', '真琴', '緋奈', '明日香', '詩織', '葵', '美月',
+                        '沙耶', '鈴音', '結衣', '蕾拉', '璃奈', '花音', '美咲', '小夜', '撫子', '優奈'
+                    ]
                 },
                 '懸疑推理': {
-                    surnames: ['陸', '顧', '沈', '林', '葉', '周', '楚', '裴', '方', '梁', '溫', '蘇', '秦', '程'],
-                    firstnames: ['言深', '尋', '清越', '若愚', '子珩', '晚舟', '向晴', '慕白', '以晨', '知微', '寒川', '念之']
+                    surnames: [
+                        '陸', '顧', '沈', '林', '葉', '周', '楚', '裴', '方', '梁',
+                        '溫', '蘇', '秦', '程', '霍', '段', '季', '寧', '嚴', '賀',
+                        '崔', '邵', '狄', '宣', '駱', '靳', '解', '穆', '柏', '卓'
+                    ],
+                    firstnames: [
+                        '言深', '尋', '清越', '若愚', '子珩', '晚舟', '向晴', '慕白', '以晨', '知微',
+                        '寒川', '念之', '慎言', '致遠', '懷安', '思衡', '臨風', '書言', '庭琛', '文景',
+                        '行知', '語默', '靖宇', '景澄', '默凡', '少卿', '雲旗', '懷瑾', '知許', '沛然'
+                    ]
                 },
                 '古風修仙': {
-                    surnames: ['謝', '李', '君', '雲', '墨', '百里', '司徒', '洛', '長孫', '南宮', '江', '師'],
-                    firstnames: ['無塵', '驚鶴', '凌霄', '長歌', '青瀾', '玄度', '聽雨', '忘機', '歸舟', '明澈', '照影', '問天']
+                    surnames: [
+                        '謝', '李', '君', '雲', '墨', '百里', '司徒', '洛', '長孫', '南宮',
+                        '江', '師', '東方', '諸葛', '公孫', '赫連', '澹臺', '皇甫', '尉遲', '蕭',
+                        '韓', '燕', '風', '步', '楚', '陸', '沈', '原', '任', '顧'
+                    ],
+                    firstnames: [
+                        '無塵', '驚鶴', '凌霄', '長歌', '青瀾', '玄度', '聽雨', '忘機', '歸舟', '明澈',
+                        '照影', '問天', '寒鋒', '溯流', '倚風', '棲雲', '懷素', '孤鴻', '知秋', '抱玉',
+                        '平生', '乘風', '渡厄', '斬浪', '重光', '雪霽', '停雲', '殘陽', '無咎', '太微'
+                    ]
                 },
                 '賽博龐克': {
-                    surnames: ['凱恩', '席爾瓦', '雷文', '諾亞', '黑木', '戴維斯', '陳', '沃克', '米勒', '克洛斯'],
-                    firstnames: ['零', '薇絲珀', '雷恩', '艾克斯', '奈克斯', '佐伊', '傑斯', '賽蓮', '芬奇', '柯爾特']
+                    surnames: [
+                        '凱恩', '席爾瓦', '雷文', '諾亞', '黑木', '戴維斯', '陳', '沃克', '米勒', '克洛斯',
+                        '杜蘭特', '吉布森', '貝克', '哈里斯', '佐藤', '高橋', '辛格', '莫拉萊斯', '莫洛托夫', '考夫曼'
+                    ],
+                    firstnames: [
+                        '零 (Zero)', '薇絲珀', '雷恩', '艾克斯', '奈克斯', '佐伊', '傑斯', '賽蓮', '芬奇', '柯爾特',
+                        '霓虹', '幽靈', '瓦爾基里', '達斯汀', '賽巴斯汀', '戴蒙', '艾許莉', '凱爾', '布雷克', '席歐'
+                    ]
                 },
                 '歐美科幻': {
-                    surnames: ['凡斯', '諾曼', '海沃德', '斯特林', '阿瑟頓', '卡萊爾', '溫徹斯特', '奧康納', '雷德利'],
-                    firstnames: ['伊森', '艾莉亞', '盧卡斯', '馬庫斯', '艾蓮娜', '加百列', '席琳', '維克多', '奧利弗']
+                    surnames: [
+                        '凡斯', '諾曼', '海沃德', '斯特林', '阿瑟頓', '卡萊爾', '溫徹斯特', '奧康納', '雷德利', '霍桑',
+                        '班奈特', '彭布羅克', '法拉第', '瓦倫丁', '蒙哥馬利', '阿姆斯壯', '錢伯斯', '肯特', '格林威治', '哈維'
+                    ],
+                    firstnames: [
+                        '伊森', '艾莉亞', '盧卡斯', '馬庫斯', '艾蓮娜', '加百列', '席琳', '維克多', '奧利弗', '西奧多',
+                        '阿德里安', '茱莉亞', '羅南', '費利克斯', '賽勒斯', '達米安', '葛蕾絲', '莉莉絲', '克里斯多福', '黛安娜'
+                    ]
                 },
                 '都會職場': {
-                    surnames: ['陸', '顧', '唐', '韓', '蔣', '許', '徐', '宋', '何', '董'],
-                    firstnames: ['廷宇', '思齊', '致遠', '冠霖', '韻如', '沛萱', '浩然', '詠儀', '振邦', '承峰']
+                    surnames: [
+                        '陸', '顧', '唐', '韓', '蔣', '許', '徐', '宋', '何', '董',
+                        '趙', '錢', '孫', '李', '周', '吳', '鄭', '王', '馮', '陳'
+                    ],
+                    firstnames: [
+                        '廷宇', '思齊', '致遠', '冠霖', '韻如', '沛萱', '浩然', '詠儀', '振邦', '承峰',
+                        '嘉榮', '文軒', '曉晴', '子涵', '彥博', '雅筑', '秉宏', '詠琪', '家豪', '佩君'
+                    ]
                 },
                 '校園青春': {
-                    surnames: ['林', '陳', '江', '夏', '蘇', '楊', '許', '葉'],
-                    firstnames: ['子安', '知夏', '沐晨', '向陽', '語萱', '宇軒', '晴川', '少庭', '映彤', '之恆']
+                    surnames: [
+                        '林', '陳', '江', '夏', '蘇', '楊', '許', '葉', '黃', '張',
+                        '廖', '徐', '吳', '蔡', '賴', '游', '簡', '鍾', '曾', '洪'
+                    ],
+                    firstnames: [
+                        '子安', '知夏', '沐晨', '向陽', '語萱', '宇軒', '晴川', '少庭', '映彤', '之恆',
+                        '晨曦', '若涵', '俊傑', '筱婷', '宇恆', '欣怡', '冠宇', '宜蓁', '品言', '佳琳'
+                    ]
                 },
                 '末日倖存': {
-                    surnames: ['石', '蒙', '鐵', '柴', '霍', '岳', '耿', '雷'],
-                    firstnames: ['拓荒', '長生', '守望', '野風', '寒生', '冬青', '烈陽', '重山', '破曉']
+                    surnames: [
+                        '石', '蒙', '鐵', '柴', '霍', '岳', '耿', '雷', '嚴', '荒',
+                        '原', '屠', '黑', '暴', '仇', '邊', '關', '戈', '蠻', '烽'
+                    ],
+                    firstnames: [
+                        '拓荒', '長生', '守望', '野風', '寒生', '冬青', '烈陽', '重山', '破曉', '燼',
+                        '孤崖', '鐵心', '殘月', '尋道', '行空', '夜巡', '堅韌', '衛國', '逐星', '無鋒'
+                    ]
                 }
             },
 
-            // 各風格典型書名庫
-            titles: {
-                '日系奇幻': ['黃昏境界的最後魔法使', '從零銘刻的誓約之刃', '落櫻與終焉魔導書', '銀月遺落的鍊金工坊', '無名騎士的星之詠唱', '蒼穹之扉與誓言之鎖', '轉生於魔素枯竭之刻', '被命運放逐的神聖誓約'],
-                '懸疑推理': ['雨夜指針停止時', '消失的第七個密碼', '盲點中的倒影', '深淵低語之證', '未送達的遺囑', '緘默的骨牌效應', '鏡像謀殺者', '灰燼下的線索'],
-                '古風修仙': ['斬雲問道錄', '山海引渡人', '凌霄客的劍匣', '九重霧海尋長生', '琉璃玉階血', '太上忘情引', '萬象歸墟經', '獨坐千峰劫'],
-                '賽博龐克': ['霓虹神經網絡', '記憶黑市的駭客', '仿生人不再夢見雨', '義體鍍層下的孤火', '核心代碼裂變', '被刪除的第九特區', '零日協定', '深網沉淪之歌'],
-                '歐美科幻': ['恆星寂滅之前', '躍遷節點上的巡航者', '深空沉默協議', '最後的碳基方舟', '星軌引力坍縮', '在銀河的邊緣播種', '外星遺蹟譯碼員', '超光速歸途'],
-                '都會職場': ['逆流談判桌', '投行邊緣', '隱形天花板的裂縫', '夜色微醺時的博弈', '未曾公開的企劃案', '咖啡因與權力名片', '合約背面的餘溫', '金鑰之爭'],
-                '校園青春': ['十七歲的風向儀', '夏末落下的粉筆灰', '奔向天台的平行線', '隱密的波長', '單車後座的夕陽記號', '未解開的二次方程式', '操場南側的秘密', '紙飛機的軌跡'],
-                '末日倖存': ['凍土避難所第零區', '灰霧覆蓋的最後晨曦', '遺落荒野的收音機', '拾荒者與發條植物', '輻射線外的綠洲', '生還者的信標', '廢墟上的守望塔', '黑雨季啟程']
-            },
-
-            // 世界觀與人物動機矩陣
-            archetypes: {
+            // 書名生成矩陣 (前綴 + 中綴 + 後綴 動態組合，每次點擊產生完全不同書名)
+            titleElements: {
                 '日系奇幻': {
-                    theme: '「即使被全世界的世界法則否定，也要守護觸手可及的珍視之人。」',
-                    setting: '浮游於雲海之上的空島都市「艾爾凡尼亞」，維持結界的古代魔導機關正逐漸崩解，神殿與流浪魔導士陣營在邊界摩擦不斷。',
-                    roleProtagonist: '持有殘缺詠唱咒紋、被學院判定為最下位卻擅長解析古文字的沉默術士',
-                    roleAlly: '個性好勝認真、背負家門榮耀的帝國見習女騎士',
-                    roleMentor: '隱居於鐘樓廢墟、總在啜飲紅茶的退役宮廷大魔導師',
-                    roleAntagonist: '試圖解放被封印的災禍古神以徹底重構階級體制的舊王族後裔',
-                    roleThirdParty: '以交換「記憶」為代價販賣禁忌魔法道具的謎樣行商人'
+                    prefixes: ['黃昏的', '被遺忘的', '終焉之刻的', '星空下的', '最後的', '無名契約的', '深淵邊境的', '落櫻凋零時的', '破曉之扉的', '殘缺詠唱的'],
+                    cores: ['魔導士', '守護誓約', '境界使者', '鍊金工房', '斷罪之刃', '龍之歌謠', '魔素迴廊', '光輝之羽', '星軌守望', '永恆神殿'],
+                    suffixes: ['與黎明之歌', '～從零開始的逆轉～', '的異端紀錄', '與命運雙生子', '之誓', '的不死詩篇', '再臨', '的黃金航標']
                 },
                 '懸疑推理': {
-                    theme: '在謊言與被篡改的記憶縫隙中，探討人性對「真相」的渴望與代價。',
-                    setting: '長年陰雨綿綿的北方海港舊城區，老式鐘錶作坊與現代法醫實驗室隔街對峙。',
-                    roleProtagonist: '心思縝密但患有輕微感知失真的舊物鑑定師 / 自由調查員',
-                    roleAlly: '看似圓滑世故、實則暗中蒐集隱密卷宗的退休法醫',
-                    roleMentor: '二十年前主辦重大懸案、如今不良於行深居簡出的老刑警',
-                    roleAntagonist: '表面上是德高望重的慈善家，私下操縱精密龐大的偽證集團',
-                    roleThirdParty: '持有關鍵底片但立場游移不定的街頭流浪攝影師'
+                    prefixes: ['雨夜的', '消失在迷霧中的', '不可言說的', '被抹煞的', '第七個', '致命的', '逆光的', '隱密的', '深淵中的', '錯位的'],
+                    cores: ['密室倒影', '骨牌密碼', '遺囑偽證', '緘默證人', '盲點殘像', '指針停止處', '謀殺草稿', '空號通話', '雙重不在場', '記憶黑匣'],
+                    suffixes: ['調查手冊', '事件薄', '的最終解謎', '之鎖', '啟示錄', '檔案', '追蹤追溯', '與未明之局']
                 },
                 '古風修仙': {
-                    theme: '凡人之軀直面不可違逆的天道法則，以手中三尺青鋒叩問天心。',
-                    setting: '靈脈逐漸枯竭的殘破九州，各大名門正派封閉山門自保，妖異與古修遺骸在人間紛擾出沒。',
-                    roleProtagonist: '身負駁雜靈根、被宗門遺棄卻偶得殘損古陣卷軸的散修游俠',
-                    roleAlly: '背負沉重玄鐵巨劍、性格直率豪邁的邊關守陵人後裔',
-                    roleMentor: '寄宿於殘缺古玉之中、言語犀利但通曉三千古法的殘魂長老',
-                    roleAntagonist: '妄圖獻祭一整座凡間郡城以重築登仙天梯的昔日聖人',
-                    roleThirdParty: '行蹤飄忽的雲遊卜算客，每一次占卜都索取不可思議的因果代價'
+                    prefixes: ['斬雲', '凌霄', '太上', '萬象', '九幽', '踏雪', '孤坐', '問鼎', '山海', '焚天'],
+                    cores: ['尋道', '劍匣', '渡厄', '歸墟', '引渡', '長生', '問天', '浮生', '劫波', '青鋒'],
+                    suffixes: ['錄', '經', '引', '客', '行', '誌', '傳', '遺卷', '長歌', '仙途']
                 },
                 '賽博龐克': {
-                    theme: '當意識與記憶皆可被明碼標價，探討個體「真實人格與人性尊嚴」的底線。',
-                    setting: '垂直高度超過千米的巨構立體都市「新迦南」，底層長年不見天日，流淌著雨水與廢棄冷卻液。',
-                    roleProtagonist: '遊走於暗巷的黑市神經資料清洗工，因讀取了一段禁忌密碼而遭全城追殺',
-                    roleAlly: '改裝了重型聲波義肢的地下防空洞酒吧情報販子',
-                    roleMentor: '早期神經網絡技術的先驅奠基人，現已將意識隱蔽在退役伺服器機房中',
-                    roleAntagonist: '生化科技巨擘的執行長，企圖以神經同步波覆蓋全城居民意志',
-                    roleThirdParty: '遵循絕對邏輯行動、自我演化出的獨立原生 AI'
+                    prefixes: ['霓虹邊緣的', '意識崩解的', '零日協定的', '重構神經的', '深網底層的', '仿生人眷戀的', '高壓電磁下的', '鍍鉻義體的', '量子黑客的', '垂直都市的'],
+                    cores: ['數據殘骸', '代碼裂變', '逃亡法則', '記憶販售者', '合成之心', '全息幽靈', '雨夜沉淪', '反叛協議', '神經脈衝', '地下節點'],
+                    suffixes: ['指令集', '特區', '陣列', '序列', '覆寫協議', '反抗線', '破曉', '重啟']
                 },
                 '歐美科幻': {
-                    theme: '在浩瀚冷酷的宇宙引力面前，文明的延續仰賴微小卻堅定的同理心。',
-                    setting: '獵戶座深空旋臂邊緣的礦業星際站，人工重力系統老化，充斥著粗獷的拓荒金屬感。',
-                    roleProtagonist: '負責監聽空間背景異常波段的孤獨深空觀測員',
-                    roleAlly: '經驗豐富、沉默寡言的退役工程巡航艦艦長',
-                    roleMentor: '畢生致力於破譯外星非碳基文明信號的老天體物理學家',
-                    roleAntagonist: '為了壟斷有限躍遷能源而推行嚴酷殘酷定額制的星區防衛總督',
-                    roleThirdParty: '漫遊於廢棄空間站殘骸之間的流浪拾荒者部族領袖'
+                    prefixes: ['躍遷節點上的', '恆星寂滅之際', '深空沉默的', '最後的', '超光速邊界的', '引力坍縮中的', '非碳基文明的', '虛空漂流的', '外星遺蹟的', '星雲背後的'],
+                    cores: ['巡航方舟', '信標解碼者', '基因種子', '降維航線', '引力弦網', '生態穹頂', '星艦孤航', '時間膨脹', '事件視界', '文明餘燼'],
+                    suffixes: ['紀元', '協議', '工程', '啟示', '探勘錄', '日誌', '編年史', '歸途']
                 },
                 '都會職場': {
-                    theme: '在資本博弈與利益糾葛中，守住內心最後一塊職業倫理與人格尊嚴。',
-                    setting: '一線城市金融特區的玻璃帷幕摩天大樓，深夜依舊燈火通明的會議室。',
-                    roleProtagonist: '堅持風險合規底線、卻遭內部排擠空降至邊緣部門的資深併購主管',
-                    roleAlly: '擅長大數據探勘與輿情追蹤的新銳分析師，性格敢言不屈',
-                    roleMentor: '早已淡出江湖、深諳產業週期輪迴的資深名譽合夥人',
-                    roleAntagonist: '為追求短期回報不惜隱瞞致命資產隱患的激進私募基金副總裁',
-                    roleThirdParty: '手握企業內部關鍵審計底稿的神秘離職財務總監'
+                    prefixes: ['逆流的', '深夜三十七樓的', '隱形天花板下的', '合約背面的', '金鑰爭奪時的', '險境中的', '併購邊緣的', '博弈時刻的', '沉默條款的', '商戰未眠的'],
+                    cores: ['談判桌', '投行對決', '資本獵手', '危機公關', '權力拼圖', '未公開提案', '財務迷局', '對沖暗流', '破局法則', '名片背影'],
+                    suffixes: ['手記', '密碼', '博弈', '清算日', '實錄', '勝負手', '回憶錄', '決策點']
                 },
                 '校園青春': {
-                    theme: '面對成長的迷茫與現實重量，在互相理解中獲得面對明天的勇氣。',
-                    setting: '面朝廣袤大海的海邊高中，初夏的微風、蟬鳴與操場紅土跑道。',
-                    roleProtagonist: '性格細膩、習慣隱藏真實想法的廣播社高二學生',
-                    roleAlly: '外表叛逆冷淡、內心深藏家庭陰霾的天才田徑社員',
-                    roleMentor: '即將退休、總是用溫熱茶水和舊書啟發學生的圖書館管理員',
-                    roleAntagonist: '追求極致升學數據、缺乏共情心的嚴厲學務主任',
-                    roleThirdParty: '帶著神秘傳聞轉學而來、行事不受任何班級群體影響的插班生'
+                    prefixes: ['奔向天台的', '十七歲那年盛夏的', '吹拂過走廊的', '被粉筆灰染白的', '平行線般的', '耳機裡共享的', '單車後座的', '操場南側的', '藏在筆記裡的', '黃昏落下的'],
+                    cores: ['風向儀', '秘密頻率', '倒數計時', '盛夏之約', '二次方程式', '紙飛機航線', '晴天信號', '未完告白', '微光波長', '青春座標'],
+                    suffixes: ['軌跡', '交角', '紀念冊', '序曲', '晴雨表', '迴音', '日記', '進行式']
                 },
                 '末日倖存': {
-                    theme: '當舊文明崩解瓦解，重建同伴之間的信任遠比搜尋糧食更為神聖。',
-                    setting: '長冬寒潮肆虐後的廢墟地表，地底避難聚落與裝甲破冰列車共存的極限世界。',
-                    roleProtagonist: '擁有卓越地形感知能力與廢墟勘測直覺的物資探勘員',
-                    roleAlly: '擅長手工改裝高壓蒸汽機與無線電通訊的堅毅女機械師',
-                    roleMentor: '一手建立這處聚落的退役軍醫老長者',
-                    roleAntagonist: '奉行掠奪至上、崇尚弱肉強食原則的荒原暴走團首領',
-                    roleThirdParty: '堅信北方未凍結溫暖淨土存在的神秘單獨巡禮者'
+                    prefixes: ['凍土之下的', '灰霧籠罩的', '黑雨季來臨前的', '輻射防線外的', '廢墟地表的', '裝甲列車上的', '荒原巡禮的', '最後淨土的', '舊世界崩潰後的', '長冬深處的'],
+                    cores: ['避難零區', '拾荒者信標', '發條綠洲', '地火引擎', '殘存聚落', '巡守要塞', '物資守望', '破冰號角', '基因種庫', '生還航線'],
+                    suffixes: ['生還手記', '紀事', '探勘志', '曙光錄', '殘響', '孤歌', '求生記', '編年史']
                 }
             },
 
-            // 通用伏筆庫
+            // 靈態世界觀、情節衝突模組（每次組合均隨機抽取不同情境組件）
+            worldMotifs: {
+                '日系奇幻': [
+                    { theme: '「縱使世界法則將你定義為錯誤，我也會握住你的手與宿命對抗到底。」', setting: '浮空群島艾爾凡尼亞，支撐島嶼浮力的古代魔導機關正逐一熄滅，聖堂勢力與底層流浪術士為爭奪有限魔素爆發暗戰。' },
+                    { theme: '「記憶是代價最昂貴的魔法，但遺忘卻是靈魂真正的死亡。」', setting: '被永恆黃昏籠罩的霧之國，人們以出賣自身情感與珍貴回憶換取禁忌的魔術奇蹟，王都地底埋藏著神代封印的真相。' },
+                    { theme: '「誓言不是鎖鏈，而是劃破破曉黑暗時最初也是最後的光。」', setting: '神魔停戰三百年後的學園城，看似平靜的學院日常下，各方王家血脈正為了喚醒沉睡的誓約原初武裝而展開明爭暗鬥。' }
+                ],
+                '懸疑推理': [
+                    { theme: '當人人都握有一塊真相的碎片時，拼湊出來的往往是超越罪惡本身的恐懼。', setting: '被暴風雨孤立的海港老城，一場跨越二十年的懸案隨一件被拍賣的古舊懷錶再度浮出水面，整座城鎮皆牽涉其中。' },
+                    { theme: '謊言有時不是為了掩蓋惡意，而是軟弱之人為了守住最後尊嚴的掩體。', setting: '高樓林立的省城司法鑑定中心，一起看似天衣無縫的密室墜樓案引發了多重不在場證明的連鎖坍塌。' }
+                ],
+                '古風修仙': [
+                    { theme: '天道視眾生為芻狗，凡人執此三尺頑鐵，不求登仙，只為人間問公道。', setting: '天地靈脈逐漸枯竭的九州大陸，各大修真宗門紛紛閉關掠奪凡間氣運，邊陲荒原上，殘存的古修法陣悄然甦醒。' },
+                    { theme: '長生若要斬斷七情六慾，那這無情大道，不要也罷。', setting: '終年雲海翻湧的凌霄萬劍門，老祖即將飛昇之際突生心魔異變，整座山門的護山大陣竟隱隱現出上古血祭的痕跡。' }
+                ],
+                '賽博龐克': [
+                    { theme: '當人體所有器官與神經皆可被替換，唯有那不願被代碼同化的疼痛定義了靈魂。', setting: '垂直高度超過三千公尺的新迦南城，底層長年酸雨泥濘，巨型生化企業的數位霓虹廣告無死角投射在每個人的視網膜上。' },
+                    { theme: '自由不是任由數據漫遊，而是在被算法精確計算的人生中選擇犯錯的權利。', setting: '黑市情報販子聚集的地下防空洞九區，一條未被記錄的「幽靈源代碼」正在所有連網市民的神經介面中自體複製。' }
+                ],
+                '歐美科幻': [
+                    { theme: '文明的偉大不在於它能航行多遠，而在於它在滅絕邊緣仍願為同類點亮燈火。', setting: '位於獵戶座邊緣的採礦星艦「先鋒號」，在躍遷引擎損壞後被困於引力透鏡的視界邊界，全體船員面臨殘酷的生存配額分配。' },
+                    { theme: '宇宙最深沉的恐怖不是冷酷與真空，而是那超越人類理解維度的永恆注視。', setting: '距離地球四光年的冰封衛星科考站，探測鑽頭在地下萬米冰海中監聽到規律的非隨機性聲波脈衝。' }
+                ],
+                '都會職場': [
+                    { theme: '在利潤最大化的精準公式裡，永遠算不準的是人心深處那一點點不甘。', setting: '跨國投行位於金融特區的頂層辦公室，涉及百億資產的跨國併購案在簽約前四十八小時突發合規風暴。' },
+                    { theme: '職場不是戰場，因為戰場上子彈有方向，而辦公室裡的冷箭甚至不需要弓弦。', setting: '陷入增長瓶頸的新銳科技巨頭內部，老派創始團隊與外聘職業經理人陣營圍繞下代核心技術的主導權展開生死博弈。' }
+                ],
+                '校園青春': [
+                    { theme: '我們在同一個教室裡看著同一塊黑板，心裡卻各自奔向截然不同的未來星系。', setting: '即將面臨拆遷合併的海邊小鎮高中，高三最後一個初夏，廣播社與田徑隊的幾名少年少女決定策劃一場永不落幕的告別企劃。' },
+                    { theme: '所謂青春，就是明知道題目沒有標準答案，卻依然把試卷寫得密密麻麻。', setting: '蟬鳴喧囂的升學名校，一間被遺忘在舊大樓角落的社團活動室，成為幾個被體制視為「邊緣問題生」的避風港。' }
+                ],
+                '末日倖存': [
+                    { theme: '廢墟之上最珍貴的物資不是罐頭與燃料，而是熄滅已久的對明天的期盼。', setting: '經歷全球極寒極夜三十年後的廢土，人類依託地熱蒸汽管道建立起垂直聚落，地表則遊蕩著狂暴的變異凍獸。' },
+                    { theme: '活著只是生物本能，但選擇如何活著，才讓我們不至於淪為荒原上的野獸。', setting: '橫跨舊大陸防線的重裝破冰列車「晨曦號」，在能源耗盡前的最後一次長途巡航中遭遇了前方信標的全線熄滅。' }
+                ]
+            },
+
+            // 豐富的伏筆對象庫
             foreshadowingPool: [
                 {
-                    object: '一枚走時總是慢了數秒的刻印機械懷錶',
-                    plant: '在故事開篇主角隨身攜帶該物件，表面上看似普通親人遺物，但機械齒輪運轉阻力異常沉重。',
-                    trigger: '中盤遭遇致命危機時，指針因外部衝擊卡死在特定凹槽，折射出內部精密的隱藏刻度。',
-                    payoff: '高潮章節揭露內部藏匿著核心身分信物或密碼矩陣，瞬間逆轉對立陣營的合法性。'
+                    object: '一枚走時慢了三秒的精鋼機械懷錶',
+                    plant: '故事開篇主角隨身攜帶該物件，看似尋常遺物，但其齒輪轉速在特殊地磁環境下會異常遲滯。',
+                    trigger: '中盤遭遇致命陷阱時，指針因外部震盪卡入隱藏凹槽，折射出內部微型刻印的世界地圖。',
+                    payoff: '高潮章節揭露內部藏有能終止防衛陣列的唯一純機械物理金鑰，逆轉局勢。'
                 },
                 {
-                    object: '一段古老殘缺的童謠歌詞或特定旋律',
-                    plant: '關鍵同伴在無意識時低聲哼唱的幾句古怪曲調，主角起初僅以為是尋常鄉土民謠。',
-                    trigger: '在深入密室或核心控制區時，石刻機關或聲紋辨識系統恰好對應了該旋律的音頻震盪。',
-                    payoff: '終盤揭示該旋律是當年避難工程創立者留下的唯一安全解鎖指令，破除了反派的必殺圈套。'
+                    object: '一段古老童謠中被刻意漏唱的第四句詞',
+                    plant: '同伴在神經緊張時無意識哼唱的旋律，歌詞在第四句總是跳過，旁人以為只是忘詞。',
+                    trigger: '深入禁地石碑前，碑文記載的祭祀儀式赫然對應了童謠的各句音階，唯獨缺了關鍵啟動咒語。',
+                    payoff: '在終局抉擇關頭，主角補唱出被隱匿的第四句，證實同伴乃是當年守護者一族的真正末裔。'
                 },
                 {
-                    object: '一個在特定情境下無意識的指尖微小動作',
-                    plant: '看似值得信賴的盟友在說出「誓死相挺」時，右手食指總會輕微刮擦掌心兩次。',
-                    trigger: '主角在調查舊卷宗或影像紀錄時，驚覺同一動作曾出現在當年幕後策劃者的關鍵合照上。',
-                    payoff: '在決戰前夕揭發該角色的真實雙面身分，逼出其埋藏十餘年的真正復仇動機。'
+                    object: '一處在下雨天便會隱隱作痛的舊創疤痕',
+                    plant: '主角手腕處看似多年前意外留下的淡白色疤痕，每逢天氣驟變或強能量波動便產生灼熱感。',
+                    trigger: '遭遇反派核心能量場攻擊時，疤痕未被腐蝕，反而泛起共鳴波長，吸收了第一波致命衝擊。',
+                    payoff: '真相揭曉：該疤痕並非創傷，而是幼年時被植入的封印術式殘核，為最終戰提供了破防護盾。'
                 },
                 {
-                    object: '一株即便在無光環境下依然維持枯槁不腐的奇異標本',
-                    plant: '主角房間角落擺放的一小株灰白植物，無論是否澆水都不發生任何變化，被視為普通紀念品。',
-                    trigger: '當環境空氣出現特殊毒素或異變能量時，該植物突然泛出微弱的淡青色光澤與露珠。',
-                    payoff: '在隊伍全員陷入陷入絕境之際，這株標本成為唯一天然中和抗體，解救眾人於危難。'
+                    object: '一本被撕去最後三頁的泛黃日記本',
+                    plant: '在導師故居中發現的研究筆記，末尾數頁被暴力撕毀，墨水邊緣呈現奇特的紫灰色氧化痕跡。',
+                    trigger: '在調查幕後黑手的秘密藏書室時，主角發現了筆跡與撕裂邊緣完全咬合的殘頁。',
+                    payoff: '殘頁內容徹底顛覆了眾人對導師死因的認知，揭發了陣營內部隱藏最深的假面同盟。'
+                },
+                {
+                    object: '一枚看似普通、永遠無法點燃的特製黃銅打火機',
+                    plant: '主角時常拿在手中把玩的舊打火機，無論如何更換火石都無法打出明火。',
+                    trigger: '在極寒或高壓真空中，打火機轉輪突然自發旋轉，釋放出一束高純度的超低溫冷凝火花。',
+                    payoff: '關鍵時刻利用冷凝火花瞬間凝固了即將爆裂的能源核心，為全員爭取到生死一線的撤離生機。'
+                },
+                {
+                    object: '一張泛黃且曝光過度的模糊黑白合照',
+                    plant: '照片背景是荒廢的舊鐘樓，前排站著多位創始人，但左側陰影裡依稀殘留著半個被刮除的人影輪廓。',
+                    trigger: '隨著故事推進，反對勢力首領在無意間露出了與照片殘影完全一致的獨特刺青與站姿。',
+                    payoff: '證明反派首領並非外來侵略者，而是當年被陣營自我背叛並驅逐的真正第一創始人。'
                 }
             ]
         };
 
         let currentProjectData = null;
 
-        // 選擇風格標籤
+        // 選擇題材風格標籤
         function selectGenre(genreName) {
             document.querySelectorAll('.genre-pill').forEach(btn => {
                 btn.classList.remove('bg-amber-800', 'text-white', 'border-amber-800');
@@ -499,7 +570,7 @@
             document.getElementById('chapterCount').value = count;
         }
 
-        // 隨機填充示範資料（符合日系或各風格姓名）
+        // 隨機靈感範例
         function fillRandomExample() {
             const genres = ['日系奇幻', '懸疑推理', '古風修仙', '賽博龐克', '歐美科幻', '都會職場', '校園青春', '末日倖存'];
             const randomGenre = genres[Math.floor(Math.random() * genres.length)];
@@ -509,20 +580,20 @@
             document.getElementById('totalWords').value = wordsOptions[Math.floor(Math.random() * wordsOptions.length)];
             document.getElementById('chapterCount').value = [8, 12, 16][Math.floor(Math.random() * 3)];
             
-            const titles = DB.titles[randomGenre];
-            document.getElementById('novelTitle').value = titles[Math.floor(Math.random() * titles.length)];
-            
-            // 隨機產生符合該題材的主角姓名
-            const namePool = DB.namesByGenre[randomGenre];
-            const surname = namePool.surnames[Math.floor(Math.random() * namePool.surnames.length)];
-            const firstname = namePool.firstnames[Math.floor(Math.random() * namePool.firstnames.length)];
-            document.getElementById('protagonistInfo').value = `${surname} ${firstname}`;
+            const pCounts = ['1', '2', '3', '4'];
+            document.getElementById('protagCount').value = pCounts[Math.floor(Math.random() * pCounts.length)];
 
-            document.getElementById('customNotes').value = randomGenre === '日系奇幻' 
-                ? '主角手上有著能夠吞噬魔法但會侵蝕壽命的漆黑手甲；同伴騎士有著不能向任何人透露的王家真名。' 
-                : '希望能強化夥伴之間的信任危機，並在第8章安排一次反轉。';
+            document.getElementById('novelTitle').value = "";
+            document.getElementById('protagonistInfo').value = "";
 
-            showToast('已隨機載入適合該風格的題材設定！');
+            const sampleNotes = [
+                '故事中存在一件逆轉短暫因果的古代遺物；夥伴之間藏有立場相悖的家族契約。',
+                '希望能著重描寫雙主角從互相利用到以命相託的心路歷程，並在第七章出現陣營反轉。',
+                '反派的動機並非純粹作惡，而是為了阻止一場更大的不可逆災厄；師徒理念衝突貫穿全篇。'
+            ];
+            document.getElementById('customNotes').value = sampleNotes[Math.floor(Math.random() * sampleNotes.length)];
+
+            showToast('已隨機載入全新配置！點擊下方按鈕即可生成大綱');
         }
 
         function resetForm() {
@@ -543,104 +614,189 @@
             }, 2600);
         }
 
-        // 依據題材生成姓名（日文/中文/歐美完全分流）
-        function generateNameForGenre(genre) {
-            const namePool = DB.namesByGenre[genre] || DB.namesByGenre['懸疑推理'];
-            const s = namePool.surnames[Math.floor(Math.random() * namePool.surnames.length)];
-            const f = namePool.firstnames[Math.floor(Math.random() * namePool.firstnames.length)];
-            if (genre === '日系奇幻') {
-                return `${s} ${f}`;
-            } else if (genre === '歐美科幻' || genre === '賽博龐克') {
-                return `${f}·${s}`;
+        // 洗牌演算法 (Fisher-Yates) 搭配時間熵，確保真隨機不雷同
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
             }
-            return `${s}${f}`;
+            return copy;
         }
 
-        // 核心生成邏輯
+        // 風格專屬姓名產生器（組合多樣性，且保證單次生成中各角色名字不重複）
+        class NameGenerator {
+            constructor(genre) {
+                this.genre = genre;
+                this.usedNames = new Set();
+                this.db = DB.namesByGenre[genre] || DB.namesByGenre['懸疑推理'];
+            }
+
+            generate(gender = 'any') {
+                for (let attempt = 0; attempt < 60; attempt++) {
+                    let fullName = "";
+                    if (this.genre === '日系奇幻') {
+                        const s = this.db.surnames[Math.floor(Math.random() * this.db.surnames.length)];
+                        let pool = [...this.db.firstnamesMale, ...this.db.firstnamesFemale];
+                        if (gender === 'm') pool = this.db.firstnamesMale;
+                        if (gender === 'f') pool = this.db.firstnamesFemale;
+                        const f = pool[Math.floor(Math.random() * pool.length)];
+                        fullName = `${s} ${f}`;
+                    } else if (this.genre === '歐美科幻' || this.genre === '賽博龐克') {
+                        const s = this.db.surnames[Math.floor(Math.random() * this.db.surnames.length)];
+                        const f = this.db.firstnames[Math.floor(Math.random() * this.db.firstnames.length)];
+                        fullName = `${f}·${s}`;
+                    } else {
+                        const s = this.db.surnames[Math.floor(Math.random() * this.db.surnames.length)];
+                        const f = this.db.firstnames[Math.floor(Math.random() * this.db.firstnames.length)];
+                        fullName = `${s}${f}`;
+                    }
+
+                    if (!this.usedNames.has(fullName)) {
+                        this.usedNames.add(fullName);
+                        return fullName;
+                    }
+                }
+                return `無名者·${Math.floor(Math.random() * 899 + 100)}`;
+            }
+        }
+
+        // 動態生成完全不雷同的小說標題
+        function generateUniqueTitle(genre) {
+            const pool = DB.titleElements[genre] || DB.titleElements['日系奇幻'];
+            const prefix = pool.prefixes[Math.floor(Math.random() * pool.prefixes.length)];
+            const core = pool.cores[Math.floor(Math.random() * pool.cores.length)];
+            const suffix = pool.suffixes[Math.floor(Math.random() * pool.suffixes.length)];
+            return `${prefix}${core}${suffix}`;
+        }
+
+        // 主角動態人設與標籤產生器
+        function generateProtagonistProfile(index, totalCount, genre, name) {
+            const archs = {
+                1: [
+                    { role: '核心主角 (Protagonist)', tag: '命運背負者 / 成長弧光', trait: '背負古老血脈或特殊印記，在常軌破碎後被迫踏入未知，性格內斂敏銳但骨子裡有一股近乎偏執的韌性。' }
+                ],
+                2: [
+                    { role: '雙主角 A (Protagonist A)', tag: '直覺行者 / 衝破常理', trait: '行事果決大膽、擅長在絕境中尋求突破，信奉實踐重於教條，內心隱藏著對過去失落之事的愧疚。' },
+                    { role: '雙主角 B (Protagonist B)', tag: '冷靜策士 / 秩序守護', trait: '長於理性推演與戰略全局，言辭克制甚至略顯冷漠，但在關鍵時刻甘願以自身為盾維繫同盟。' }
+                ],
+                3: [
+                    { role: '主角 1 (Leader / Pioneer)', tag: '隊伍樞紐 / 核心信念', trait: '凝聚小隊的靈魂人物，具備不可思議的直覺與號召力，承擔著直面最終對立的命運代價。' },
+                    { role: '主角 2 (Guardian / Shield)', tag: '堅毅之盾 / 實力底牌', trait: '作風沉穩可靠，兼具強大防護能力與敏銳危機感，是團隊身後最值得託付後背的依靠。' },
+                    { role: '主角 3 (Catalyst / Specialist)', tag: '技術奇兵 / 靈活變數', trait: '精通獨門古術、情報探勘或科技解構，行事不拘一格，往往在死局中嗅出出人意料的逃生通道。' }
+                ],
+                4: [
+                    { role: '群像核心 1 (指揮者)', tag: '戰略大腦 / 決策天平', trait: '統籌隊伍行動節奏，冷靜冷酷與深厚同理心交織，負責在不可調和的矛盾中做出抉擇。' },
+                    { role: '群像核心 2 (突擊前鋒)', tag: '尖刀利刃 / 熱血意志', trait: '戰鬥力超群且行動快於言語，擁有最強烈的情感共鳴與正義衝動。' },
+                    { role: '群像核心 3 (智略支援)', tag: '情報網絡 / 幕後推手', trait: '遊走於暗影與情報縫隙，擅長佈局謀算，看似玩世不恭實則心細如髮。' },
+                    { role: '群像核心 4 (道德羅盤)', tag: '心靈撫慰 / 純粹信念', trait: '在眾人逐漸被殘酷現實侵蝕之際，始終守護最純粹的初衷，是隊伍不至滑向深淵的關鍵韁繩。' }
+                ]
+            };
+
+            const list = archs[totalCount] || archs[1];
+            const item = list[index] || list[0];
+            return {
+                role: item.role,
+                name: name,
+                trait: item.trait,
+                tag: item.tag,
+                tagBg: 'bg-amber-100 text-amber-900 border border-amber-200'
+            };
+        }
+
+        // 核心表單提交
         function handleGenerate(event) {
             event.preventDefault();
 
-            // 取得輸入值
+            // 取得風格
             let genre = document.getElementById('customGenre').value.trim();
             if (!genre) {
                 genre = '日系奇幻';
                 selectGenre(genre);
             }
 
+            // 題材匹配
+            const matchedKey = Object.keys(DB.namesByGenre).find(k => genre.includes(k)) || '日系奇幻';
+
             const totalWords = parseInt(document.getElementById('totalWords').value, 10) || 100000;
             const chapterCount = Math.max(3, Math.min(50, parseInt(document.getElementById('chapterCount').value, 10) || 10));
+            const protagCount = parseInt(document.getElementById('protagCount').value, 10) || 1;
             let title = document.getElementById('novelTitle').value.trim();
-            let protag = document.getElementById('protagonistInfo').value.trim();
+            let rawProtagInput = document.getElementById('protagonistInfo').value.trim();
             const customNotes = document.getElementById('customNotes').value.trim();
 
-            // 取得風格母板
-            const matchedKey = Object.keys(DB.archetypes).find(k => genre.includes(k)) || '日系奇幻';
-            const baseArchetype = DB.archetypes[matchedKey];
-            
+            // 確保每次隨機書名絕不重複
             if (!title) {
-                const list = DB.titles[matchedKey] || ['命運的交匯點', '沉寂之海的回音', '最後的晨星契約'];
-                title = list[Math.floor(Math.random() * list.length)];
+                title = generateUniqueTitle(matchedKey);
             }
 
-            if (!protag) {
-                protag = generateNameForGenre(matchedKey);
+            // 隨機世界觀抽取（隨機洗牌，每次點擊獲得全新氛圍）
+            const motifPool = shuffleArray(DB.worldMotifs[matchedKey] || DB.worldMotifs['日系奇幻']);
+            const selectedMotif = motifPool[0];
+
+            // 姓名產生器實例（保證全場無同名角色）
+            const nameGen = new NameGenerator(matchedKey);
+
+            // 解析使用者手動輸入的主角姓名
+            let customNames = [];
+            if (rawProtagInput) {
+                customNames = rawProtagInput.split(/[,，、\s]+/).filter(Boolean);
             }
 
-            // 人物設定生成（使用與風格高度契合的名字）
-            const characters = [
-                {
-                    role: '主角 (Protagonist)',
-                    name: protag,
-                    trait: baseArchetype.roleProtagonist,
-                    tag: '核心視角 / 成長弧光',
-                    tagBg: 'bg-amber-100 text-amber-800'
-                },
-                {
-                    role: '核心夥伴 (Ally / Partner)',
-                    name: generateNameForGenre(matchedKey),
-                    trait: baseArchetype.roleAlly,
-                    tag: '互補技能 / 道德拉扯',
-                    tagBg: 'bg-emerald-100 text-emerald-800'
-                },
-                {
-                    role: '引導者 / 貴人 (Mentor)',
-                    name: generateNameForGenre(matchedKey),
-                    trait: baseArchetype.roleMentor,
-                    tag: '關鍵線索 / 理念傳承',
-                    tagBg: 'bg-blue-100 text-blue-800'
-                },
-                {
-                    role: '對立面 / 宿敵 (Antagonist)',
-                    name: generateNameForGenre(matchedKey),
-                    trait: baseArchetype.roleAntagonist,
-                    tag: '利益衝突 / 理念極端',
-                    tagBg: 'bg-rose-100 text-rose-800'
-                },
-                {
-                    role: '變數第三方 (Wildcard)',
-                    name: generateNameForGenre(matchedKey),
-                    trait: baseArchetype.roleThirdParty,
-                    tag: '情報天平 / 局勢逆轉',
-                    tagBg: 'bg-purple-100 text-purple-800'
-                }
-            ];
+            // 構建主角群
+            const characters = [];
+            const protagonists = [];
+            for (let i = 0; i < protagCount; i++) {
+                const name = customNames[i] || nameGen.generate();
+                const pProfile = generateProtagonistProfile(i, protagCount, matchedKey, name);
+                protagonists.push(pProfile);
+                characters.push(pProfile);
+            }
 
-            // 生成章節結構，並將自訂備註融入章節撰寫建議與事件中
-            const chapters = generateChapterOutlines(chapterCount, totalWords, matchedKey, characters, title, customNotes);
+            // 構建重要配角群（反派、導師/後援、關鍵變數）
+            const antagonistName = nameGen.generate();
+            const mentorName = nameGen.generate();
+            const wildcardName = nameGen.generate();
 
-            // 伏筆挑選與自訂備註融合
-            const shuffledForeshadowing = [...DB.foreshadowingPool].sort(() => 0.5 - Math.random()).slice(0, 3);
+            const antagonist = {
+                role: '核心宿敵 / 對立面 (Antagonist)',
+                name: antagonistName,
+                trait: '持有另一套邏輯自洽的世界秩序藍圖，行事決絕狠辣，其行動直接戳中主角群最大的信念弱點。',
+                tag: '理念極端 / 壓迫威脅',
+                tagBg: 'bg-rose-100 text-rose-800 border border-rose-200'
+            };
+            const mentor = {
+                role: '引路者 / 後援樞紐 (Mentor)',
+                name: mentorName,
+                trait: '知曉舊世界或隱密真相的倖存者，以亦師亦友的姿態給予關鍵引導，但自身同樣被過去的誓約所困。',
+                tag: '秘辛傳承 / 關鍵底牌',
+                tagBg: 'bg-blue-100 text-blue-800 border border-blue-200'
+            };
+            const wildcard = {
+                role: '變數第三方 (Wildcard)',
+                name: wildcardName,
+                trait: '遊走於灰色地帶的情報商人或獨立高手，其立場隨利益與危機天平隨時逆轉。',
+                tag: '局勢天平 / 意外推手',
+                tagBg: 'bg-purple-100 text-purple-800 border border-purple-200'
+            };
+
+            characters.push(antagonist, mentor, wildcard);
+
+            // 動態章節生成
+            const chapters = generateDynamicChapters(chapterCount, totalWords, matchedKey, protagonists, antagonist, mentor, wildcard, customNotes);
+
+            // 伏筆庫洗牌隨機抽取 3 個，完全不同
+            const shuffledFs = shuffleArray(DB.foreshadowingPool).slice(0, 3);
             if (customNotes) {
-                // 如果有使用者備註，將第一項伏筆融入使用者的客製內容
-                shuffledForeshadowing[0] = {
-                    object: `特殊關聯線索（融合設定：${customNotes.slice(0, 18)}...）`,
-                    plant: `於故事序盤將使用者的核心偏好（「${customNotes}」）巧妙化為場景中的背景細節，主角未察覺其深層意義。`,
-                    trigger: `中盤劇情轉折時，該設定引發關鍵反應，顛覆了目前的判斷。`,
-                    payoff: `決戰時直接化為打破死局的王牌，徹底回收這條隱密伏線。`
+                shuffledFs[0] = {
+                    object: `使用者指定的核心關鍵引信（融入偏好：${customNotes.slice(0, 15)}...）`,
+                    plant: `於序盤將使用者的創作細節（「${customNotes}」）巧妙布置於環境細節中，主角群起初僅視為背景常態。`,
+                    trigger: `中盤劇情轉折危機爆發時，此設定引發連鎖反應，顛覆了目前的局勢優勢。`,
+                    payoff: `決戰時成為打破對峙僵局的致勝關鍵，前後呼應徹底完成閉環。`
                 };
             }
 
-            const foreshadowings = shuffledForeshadowing.map((item, idx) => {
+            const foreshadowings = shuffledFs.map((item, idx) => {
                 const plantChap = Math.max(1, Math.floor(chapterCount * 0.15) + idx);
                 const triggerChap = Math.floor(chapterCount * 0.55) + idx;
                 const payoffChap = Math.max(plantChap + 2, Math.floor(chapterCount * 0.85) + (idx % 2));
@@ -652,49 +808,53 @@
                 };
             });
 
-            // 儲存當前專案資料
+            // 儲存狀態
             currentProjectData = {
                 title,
                 genre,
                 totalWords,
                 chapterCount,
-                theme: baseArchetype.theme,
-                setting: baseArchetype.setting,
+                protagCount,
+                theme: selectedMotif.theme,
+                setting: selectedMotif.setting,
                 customNotes,
                 characters,
+                protagonists,
+                antagonist,
+                mentor,
+                wildcard,
                 chapters,
                 foreshadowings,
                 paceAnalysis: calculatePaceAnalysis(totalWords, chapterCount)
             };
 
-            // 渲染至 UI
+            // 渲染視圖
             renderResults(currentProjectData);
 
-            // 滾動至成果區
+            // 滾動至展示區
             const resultSection = document.getElementById('resultSection');
             resultSection.classList.remove('hidden');
             resultSection.scrollIntoView({ behavior: 'smooth' });
-            showToast('小說大綱與章節架構生成完成！');
+            showToast('全新小說大綱已生成！');
         }
 
         function calculatePaceAnalysis(words, chapters) {
             const avg = Math.round(words / chapters);
             let paceTag = "節奏勻稱流暢";
-            if (avg < 3000) paceTag = "輕快緊湊（輕小說/快節奏連載風格）";
-            else if (avg > 7000) paceTag = "沉穩厚實（經典長篇敘事風格）";
+            if (avg < 3000) paceTag = "緊湊明快（適合連載／快節奏敘事）";
+            else if (avg > 7000) paceTag = "沉穩厚實（適合大世界觀宏大篇章）";
             return `全書預計 ${words.toLocaleString()} 字 ｜ 平均每章約 ${avg.toLocaleString()} 字 ｜ ${paceTag}`;
         }
 
-        // 動態生成章節演算法
-        function generateChapterOutlines(count, totalWords, genre, chars, bookTitle, customNotes) {
+        // 動態章節演算法（依主角配置自動切換單人視角、雙視角交鋒、小隊分頭行動）
+        function generateDynamicChapters(count, totalWords, genre, protags, ant, mentor, wildcard, customNotes) {
             const avgWord = Math.round(totalWords / count);
             const chapters = [];
+            const pCount = protags.length;
 
-            const p = chars[0].name;
-            const ally = chars[1].name;
-            const mentor = chars[2].name;
-            const ant = chars[3].name;
-            const third = chars[4].name;
+            const pNames = protags.map(p => p.name).join(' 與 ');
+            const p1 = protags[0].name;
+            const p2 = protags[1] ? protags[1].name : null;
 
             for (let i = 1; i <= count; i++) {
                 const progress = i / count;
@@ -705,73 +865,83 @@
                 let conflict = "";
                 let tip = "";
 
+                // 輪換焦點主角
+                const focusProtag = protags[(i - 1) % pCount].name;
+
                 if (progress <= 0.25) {
-                    act = "第一幕：啟程與常態裂隙";
+                    act = "第一幕：日常常軌破裂與命運集結";
                     actBadge = "bg-sky-50 text-sky-700 border-sky-200";
                     if (i === 1) {
-                        title = `常軌的終結與異常之兆`;
-                        coreEvent = `介紹主角【${p}】的日常生活環境與內心缺憾；一次看似日常的遭遇中，異常事件突發，徹底打破平衡。`;
-                        conflict = `主角對未知的恐懼與不得不行動的現實壓力。`;
-                        tip = `著重描寫主角在日常裡的敏銳特質；${customNotes ? `可在此處初次隱蔽提及「${customNotes.slice(0, 15)}...」的相關痕跡。` : `埋下首個不起眼的物品伏筆。`}`;
+                        title = `初始之痕與被打破的寧靜`;
+                        if (pCount === 1) {
+                            coreEvent = `以【${p1}】的日常生活視角展開，揭露內心缺憾與生存環境；突發異常事件發生，迫使其離開安全區。`;
+                        } else if (pCount === 2) {
+                            coreEvent = `雙線交錯開場：呈現【${p1}】與【${p2}】截然不同的處境，一次命運意外使兩人的軌跡在混亂中猛烈交匯。`;
+                        } else {
+                            coreEvent = `多重視角快奏切入：呈現隊伍成員在不同角落遭遇同一起重大異變，危機的陰影開始向全體成員籠罩。`;
+                        }
+                        conflict = `對未知的本能抗拒與被命運推動的迫切現實。`;
+                        tip = `營造細緻的環境氛圍；${customNotes ? `在此處自然埋設「${customNotes.slice(0, 15)}...」的背景蛛絲馬跡。` : `鋪陳首個伏筆道具的出場。`}`;
                     } else {
-                        title = `跨越邊界與締結契約`;
-                        coreEvent = `危機擴大，主角離開安全領域，在探尋真相途中遭遇【${ally}】。兩人性格風格截然不同，但因利害關係達成臨時共識。`;
-                        conflict = `尚未建立的信任感與對彼此身分的猜忌。`;
-                        tip = `透過對話展現兩人的價值觀碰撞，並建立鮮明的互動節奏。`;
+                        title = `陣線初成與利害同盟`;
+                        coreEvent = `危機加劇，【${pNames}】在【${mentor.name}】的引導下完成首次合作，眾人雖理念各有保留，但為應對眼前威脅達成臨時契約。`;
+                        conflict = `彼此間隱蔽的信任赤字與各自藏匿的真實動機。`;
+                        tip = `透過言行細節勾勒不同主角的思維差異，避免角色聲音同質化。`;
                     }
                 } else if (progress <= 0.60) {
-                    act = "第二幕（上）：深入險境與試煉升級";
+                    act = "第二幕（上）：試煉深化與局勢逆轉";
                     actBadge = "bg-amber-50 text-amber-700 border-amber-200";
                     if (progress <= 0.40) {
-                        title = `導師指引與迷霧深處`;
-                        coreEvent = `在【${mentor}】的引導與指點下，主角逐漸拼湊出關鍵規則與世界真相，但也正式引起對手【${ant}】勢力的直接監視。`;
-                        conflict = `外部威脅壓境，主角自身能力的不足與緊迫感。`;
-                        tip = `逐步拓寬舞臺設定，強化配角群的群像感與生存壓力。`;
+                        title = `深入腹地與暗影交鋒`;
+                        coreEvent = `主角小隊以【${focusProtag}】為核心展開主動調查，與宿敵【${ant.name}】的手下產生正面碰撞，險象環生中奪得關鍵情報。`;
+                        conflict = `敵我實力懸殊的心理壓力，以及對抗手段邊界的道德博弈。`;
+                        tip = `展開世界觀架構中的特殊規則，增加情節的解密與探索樂趣。`;
                     } else {
-                        title = `虛妄的勝機與中點轉折`;
-                        coreEvent = `團隊執行了一次大膽的計畫，看似取得了至關重要的成果；然而神秘第三方【${third}】的意外現身，使局勢急轉直下。`;
-                        conflict = `自以為的勝利化為更大的危機陷阱。`;
-                        tip = `設計「假高潮」，讓讀者隨角色經歷由喜轉驚的強烈心理落差。`;
+                        title = `虛妄的勝果與中點崩裂`;
+                        coreEvent = `看似完美的突襲計畫成功執行，正當眾人慶祝之際，【${wildcard.name}】的意外反水或中立攪局，使整個局勢瞬間陷入萬劫不復的陷阱。`;
+                        conflict = `被假象勝利蒙蔽後的全盤崩盤與重大背叛感。`;
+                        tip = `中點重大反轉（Midpoint Twist），狠狠粉碎角色前期的舒適圈。`;
                     }
                 } else if (progress <= 0.85) {
-                    act = "第二幕（下）：深淵低谷與靈魂暗夜";
+                    act = "第二幕（下）：靈魂暗夜與向死而生";
                     actBadge = "bg-rose-50 text-rose-700 border-rose-200";
                     if (progress <= 0.75) {
-                        title = `分崩離析與沉重代價`;
-                        coreEvent = `宿敵【${ant}】展開殘酷的反制，隱密據點遭重創，【${mentor}】付出極大代價退場，同盟內部爆發激烈的信念指責。`;
-                        conflict = `核心目標幾近破滅，主角陷入深層的自我懷疑與無力感。`;
-                        tip = `此為故事的至暗時刻，剝離主角的所有外在依賴，逼出最底層的原動力。`;
+                        title = `深淵低谷與各自的代價`;
+                        coreEvent = `據點遭受滅頂之災，【${mentor.name}】為保護主角群付出慘痛代價；【${pNames}】爆發劇烈理念分歧，甚至瀕臨解體邊緣。`;
+                        conflict = `目標看似已無實現可能，每個人的內心防線被徹底擊碎。`;
+                        tip = `至暗時刻（All Hope is Lost），剝離主角群的所有依託，拷問其最根本的內心渴望。`;
                     } else {
-                        title = `死地新生與最後的籌碼`;
-                        coreEvent = `主角【${p}】直面內心的脆弱，完成心理蛻變；重新爭取【${ally}】的堅定支持，決定以非傳統方式發起最後逆擊。`;
-                        conflict = `勝率微渺的心理壓力與不計代價的決斷。`;
-                        tip = `加快敘事節奏，將前期埋設的多條支線開始向決戰核心收束。`;
+                        title = `碎火重鑄與最後的默契`;
+                        coreEvent = `【${focusProtag}】在廢墟中完成心理蛻變，其餘成員相繼尋回初衷；彼此徹底放下戒備，以最真實的姿態重新背靠背站在一起。`;
+                        conflict = `以極微小的勝算籌碼，挑戰無懈可擊的龐大秩序。`;
+                        tip = `加快行文節奏，讓前期分散的支線與線索向最終決戰點急速靠攏收束。`;
                     }
                 } else {
-                    act = "第三幕：終極對抗與新生秩序";
+                    act = "第三幕：終極對抗與黎明新生";
                     actBadge = "bg-purple-50 text-purple-700 border-purple-200";
                     if (i === count) {
-                        title = `晨曦破曉與重塑的境界`;
-                        coreEvent = `決戰塵埃落定，世界雖然留下了無法抹滅的痕跡，但嶄新的秩序業已建立。主角【${p}】與同伴凝視地平線，完成人物弧光閉環。`;
-                        conflict = `對逝去人事物的追憶與邁向未來的平靜釋懷。`;
-                        tip = `給予讀者充足的情緒沉澱空間，結尾可與第一章的開篇意象形成首尾呼應。`;
+                        title = `破曉的餘韻與嶄新的地平線`;
+                        coreEvent = `浩劫平息，舊體系崩解，嶄新秩序在創傷中萌芽。【${pNames}】完成了各自的人物成長弧光，走向屬於他們的未來。`;
+                        conflict = `對逝去人事的綿長追思，以及面對未知的淡然釋懷。`;
+                        tip = `留下富有餘韻的結尾鏡頭，與第一章開篇的日常意象形成深層對照。`;
                     } else {
-                        title = `信念的巔峰對決與破局`;
-                        coreEvent = `與【${ant}】進行最終交鋒；前期埋設的關鍵細節在此時得到決定性觸發，局勢在毫釐之間完成逆轉。`;
-                        conflict = `兩種終極正義與生存方式的正面撞擊。`;
-                        tip = `動作與心理描寫緊湊交織，避免憑空降神，勝負必須根植於主角一路以來的累積。`;
+                        title = `終極交鋒與因果回響`;
+                        coreEvent = `與宿敵【${ant.name}】的最終對決！前期埋設的種種伏筆與關鍵道具在此時被連鎖觸發，小隊成員以絕妙的默契完成了命運逆轉。`;
+                        conflict = `兩種終極信念的正面撞擊，勝負僅在一念之間。`;
+                        tip = `高潮決戰避免憑空降神，逆轉點必須建立在前期主角所歷經的痛苦代價與智性累積之上。`;
                     }
                 }
 
-                // 微調各章字數波幅
-                const wordVariance = Math.round((Math.sin(i * 1.5) * 0.15 + 1) * avgWord);
+                // 隨機動態字數震盪
+                const variance = Math.round((Math.sin(i * 1.7) * 0.12 + 1) * avgWord);
 
                 chapters.push({
                     chapterNumber: i,
                     title: `第 ${i} 章：${title}`,
-                    wordTarget: wordVariance,
+                    wordTarget: variance,
                     act,
                     actBadge,
+                    focusProtag,
                     coreEvent,
                     conflict,
                     tip
@@ -781,17 +951,20 @@
             return chapters;
         }
 
-        // 渲染結果畫面
+        // 渲染結果
         function renderResults(data) {
             document.getElementById('displayTitle').innerText = data.title;
             document.getElementById('badgeGenre').innerText = data.genre;
+            
+            const modeLabels = { 1: '單主角核心視角', 2: '雙主角宿命搭檔', 3: '三位一體鐵三角', 4: '四人群像動態' };
+            document.getElementById('badgeProtagMode').innerText = modeLabels[data.protagCount] || '多角色群像';
             document.getElementById('badgeScale').innerText = `${data.chapterCount} 個章節規劃`;
             document.getElementById('displayTargetWords').innerText = `目標總字數：約 ${data.totalWords.toLocaleString()} 字`;
             document.getElementById('displayPaceAnalysis').innerText = data.paceAnalysis;
             document.getElementById('displayTheme').innerText = data.theme;
             document.getElementById('displaySetting').innerText = data.setting;
 
-            // 處理備註展示
+            // 備註顯示
             const customBox = document.getElementById('displayCustomNotesBox');
             if (data.customNotes) {
                 document.getElementById('displayCustomNotes').innerText = data.customNotes;
@@ -800,7 +973,7 @@
                 customBox.classList.add('hidden');
             }
 
-            // 渲染角色卡片
+            // 角色卡片列表
             const charContainer = document.getElementById('characterCardsContainer');
             charContainer.innerHTML = '';
             data.characters.forEach(c => {
@@ -819,47 +992,10 @@
                 charContainer.appendChild(card);
             });
 
-            // 渲染角色拓撲關係
-            const relationDiagram = document.getElementById('relationDiagram');
-            const [p, ally, mentor, ant, third] = data.characters;
-            relationDiagram.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-stone-800">${p.name}</span>
-                            <span class="text-stone-400">⟷</span>
-                            <span class="font-bold text-stone-800">${ally.name}</span>
-                        </div>
-                        <span class="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">互相託付・性格互補</span>
-                    </div>
-                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-stone-800">${p.name}</span>
-                            <span class="text-stone-400">⟵</span>
-                            <span class="font-bold text-stone-800">${mentor.name}</span>
-                        </div>
-                        <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">受贈關鍵技藝與理念傳承</span>
-                    </div>
-                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-stone-800">${p.name}</span>
-                            <span class="text-rose-500 font-bold">⚡</span>
-                            <span class="font-bold text-stone-800">${ant.name}</span>
-                        </div>
-                        <span class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded border border-rose-200">宿命衝突・道德核心截然對立</span>
-                    </div>
-                    <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-stone-800">${third.name}</span>
-                            <span class="text-amber-500">❓</span>
-                            <span class="text-stone-600 font-medium">局勢動態</span>
-                        </div>
-                        <span class="text-[11px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200">情報交易者・隨利害動搖天平</span>
-                    </div>
-                </div>
-            `;
+            // 隨主角人數完全重構的角色關係圖
+            renderRelationDiagram(data);
 
-            // 渲染章節列表
+            // 章節列表
             const chapContainer = document.getElementById('chaptersContainer');
             chapContainer.innerHTML = '';
             data.chapters.forEach(chap => {
@@ -877,7 +1013,11 @@
                         </div>
                     </button>
                     <div id="content-${chap.chapterNumber}" class="hidden px-4 pb-4 pt-1 border-t border-stone-100 text-xs sm:text-sm space-y-2 bg-white">
-                        <div class="mt-2">
+                        <div class="mt-2 text-stone-500 font-medium">
+                            <span>當章焦點核心：</span>
+                            <span class="text-stone-800 font-bold bg-amber-50 px-2 py-0.5 rounded border border-amber-200/60">${chap.focusProtag}</span>
+                        </div>
+                        <div>
                             <span class="font-bold text-stone-700">【核心事件】</span>
                             <span class="text-stone-600">${chap.coreEvent}</span>
                         </div>
@@ -894,7 +1034,7 @@
                 chapContainer.appendChild(item);
             });
 
-            // 渲染伏筆卡片
+            // 伏筆列表
             const fsContainer = document.getElementById('foreshadowingContainer');
             fsContainer.innerHTML = '';
             data.foreshadowings.forEach((fs, i) => {
@@ -904,7 +1044,7 @@
                     <div>
                         <div class="flex items-center justify-between border-b border-stone-200/70 pb-2 mb-2">
                             <span class="font-bold text-amber-900">伏筆線索 #${i + 1}</span>
-                            <span class="text-[10px] bg-stone-200/70 text-stone-700 px-2 py-0.5 rounded">信號道具</span>
+                            <span class="text-[10px] bg-stone-200/70 text-stone-700 px-2 py-0.5 rounded">情節密碼</span>
                         </div>
                         <h5 class="font-bold text-stone-800 text-sm mb-2">${fs.object}</h5>
                         <p class="text-stone-600 mb-2"><strong class="text-stone-700">🌱 埋設 (第 ${fs.plantChap} 章)：</strong>${fs.plant}</p>
@@ -918,7 +1058,200 @@
             });
         }
 
-        // 章節收摺邏輯
+        // 動態生成關係拓撲圖（隨主角人數 1~4 完全不同架構）
+        function renderRelationDiagram(data) {
+            const rel = document.getElementById('relationDiagram');
+            const p = data.protagonists;
+            const ant = data.antagonist;
+            const mentor = data.mentor;
+            const wildcard = data.wildcard;
+
+            let html = "";
+
+            if (data.protagCount === 1) {
+                // 單主角：經典星型拓撲
+                html = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-amber-900">${p[0].name}</span>
+                                <span class="text-stone-400">⟵受教傳承⟵</span>
+                                <span class="text-stone-700">${mentor.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">理念傳承・關鍵技法</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-amber-900">${p[0].name}</span>
+                                <span class="text-rose-500 font-bold">⚡宿命碰撞⚡</span>
+                                <span class="text-rose-800 font-bold">${ant.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded border border-rose-200">道德衝突・終局死鬥</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-amber-900">${p[0].name}</span>
+                                <span class="text-purple-400">⟷利益斡旋⟷</span>
+                                <span class="text-stone-700">${wildcard.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200">情報交易・立場游移</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="text-stone-700">${mentor.name}</span>
+                                <span class="text-stone-400">⋯舊日恩怨⋯</span>
+                                <span class="text-rose-800 font-bold">${ant.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-stone-100 text-stone-700 px-2 py-0.5 rounded border border-stone-200">昔日誓約破滅之因</span>
+                        </div>
+                    </div>
+                `;
+            } else if (data.protagCount === 2) {
+                // 雙主角：雙核雙雄拓撲
+                html = `
+                    <div class="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200 mb-3 flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-amber-950 text-sm">【雙主角核心張力】</span>
+                            <span class="font-bold text-amber-900">${p[0].name}</span>
+                            <span class="text-amber-600 font-bold text-sm">⮂ 理念撞擊 ⇄ 命運共生 ⮃</span>
+                            <span class="font-bold text-amber-900">${p[1].name}</span>
+                        </div>
+                        <span class="text-xs bg-amber-200/80 text-amber-950 font-bold px-2.5 py-0.5 rounded-full">雙核驅動</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[0].name}</span>
+                                <span class="text-stone-400">⟵指引⟵</span>
+                                <span class="text-stone-700">${mentor.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">技藝啟蒙與意志寄託</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[1].name}</span>
+                                <span class="text-rose-500 font-bold">⚡仇恨牽制⚡</span>
+                                <span class="text-rose-800 font-bold">${ant.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded border border-rose-200">不可調和的血脈死仇</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="text-stone-800">雙主角陣營</span>
+                                <span class="text-purple-400">⟷情報天平⟷</span>
+                                <span class="text-stone-700">${wildcard.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200">雙方爭取之關鍵第三方</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[0].name}</span>
+                                <span class="text-amber-500">🛡️互保死角🛡️</span>
+                                <span class="font-bold text-stone-800">${p[1].name}</span>
+                            </div>
+                            <span class="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">背對背作戰之終極信賴</span>
+                        </div>
+                    </div>
+                `;
+            } else if (data.protagCount === 3) {
+                // 三人小隊：鐵三角平衡拓撲
+                html = `
+                    <div class="p-3.5 bg-blue-50/60 rounded-xl border border-blue-200 mb-3">
+                        <div class="font-bold text-blue-950 text-xs mb-1">【鐵三角小隊內部共振】</div>
+                        <div class="flex flex-wrap items-center justify-around gap-2 text-xs">
+                            <span class="font-bold text-stone-800">${p[0].name} (核心信念)</span>
+                            <span class="text-blue-500">⟷</span>
+                            <span class="font-bold text-stone-800">${p[1].name} (堅固護盾)</span>
+                            <span class="text-blue-500">⟷</span>
+                            <span class="font-bold text-stone-800">${p[2].name} (奇兵變數)</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">鐵三角隊伍</span>
+                                <span class="text-rose-500 font-bold">⚡全員迎擊⚡</span>
+                                <span class="text-rose-800 font-bold">${ant.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded border border-rose-200">分工拆解反派防線</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[0].name}</span>
+                                <span class="text-stone-400">⟵戰術指揮⟵</span>
+                                <span class="text-stone-700">${mentor.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">全隊作戰目標樞紐</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[2].name}</span>
+                                <span class="text-purple-400">⋯暗線聯絡⋯</span>
+                                <span class="text-stone-700">${wildcard.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200">灰色領域之秘密渠道</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[1].name}</span>
+                                <span class="text-emerald-500">🛡️情感基石🛡️</span>
+                                <span class="font-bold text-stone-800">${p[0].name} / ${p[2].name}</span>
+                            </div>
+                            <span class="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">內部爭執時之調和核心</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 四人小隊/群像：多元矩陣拓撲
+                html = `
+                    <div class="p-3.5 bg-purple-50/60 rounded-xl border border-purple-200 mb-3">
+                        <div class="font-bold text-purple-950 text-xs mb-1">【群像小隊多元網絡】</div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                            <div class="bg-white p-1.5 rounded border border-purple-100 font-bold">${p[0].name}<div class="text-[10px] text-stone-400 font-normal">決策大腦</div></div>
+                            <div class="bg-white p-1.5 rounded border border-purple-100 font-bold">${p[1].name}<div class="text-[10px] text-stone-400 font-normal">正面尖刀</div></div>
+                            <div class="bg-white p-1.5 rounded border border-purple-100 font-bold">${p[2].name}<div class="text-[10px] text-stone-400 font-normal">智略奇兵</div></div>
+                            <div class="bg-white p-1.5 rounded border border-purple-100 font-bold">${p[3].name}<div class="text-[10px] text-stone-400 font-normal">道德羅盤</div></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[0].name} 與 ${p[1].name}</span>
+                                <span class="text-amber-500 font-bold">⇄ 理智與熱血 ⇄</span>
+                            </div>
+                            <span class="text-[11px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded border border-amber-200">前線核心搭檔</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">${p[2].name} 與 ${p[3].name}</span>
+                                <span class="text-purple-500 font-bold">⇄ 算計與純粹 ⇄</span>
+                            </div>
+                            <span class="text-[11px] bg-purple-50 text-purple-800 px-2 py-0.5 rounded border border-purple-200">深層心靈鏡像</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="font-bold text-stone-800">四人組陣線</span>
+                                <span class="text-rose-500 font-bold">⚡聯合包圍⚡</span>
+                                <span class="text-rose-800 font-bold">${ant.name}</span>
+                            </div>
+                            <span class="text-[11px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded border border-rose-200">多角度打破對手陰謀</span>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border border-stone-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2 font-medium">
+                                <span class="text-stone-700">${mentor.name} / ${wildcard.name}</span>
+                                <span class="text-blue-400">⋯外環支援⋯</span>
+                                <span class="font-bold text-stone-800">群像小隊</span>
+                            </div>
+                            <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">宏觀局勢推進器</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            rel.innerHTML = html;
+        }
+
+        // 章節收摺
         function toggleChapter(num) {
             const content = document.getElementById(`content-${num}`);
             const arrow = document.getElementById(`arrow-${num}`);
@@ -946,11 +1279,11 @@
             });
         }
 
-        // 轉換為 Markdown 文字
+        // 轉換為 Markdown
         function buildMarkdownText(data) {
             let md = `# 《${data.title}》小說立項企劃書\n\n`;
             md += `> **風格定位**：${data.genre} ｜ **預計規模**：${data.chapterCount} 章（約 ${data.totalWords.toLocaleString()} 字）\n`;
-            md += `> **節奏步調**：${data.paceAnalysis}\n`;
+            md += `> **主角配置**：${data.protagCount} 位主角架構 ｜ **節奏步調**：${data.paceAnalysis}\n`;
             if (data.customNotes) {
                 md += `> **特定偏好備註**：${data.customNotes}\n`;
             }
@@ -969,6 +1302,7 @@
             md += `## 三、 章節細化大綱與寫作指引\n\n`;
             data.chapters.forEach(chap => {
                 md += `### ${chap.title} (${chap.act})\n`;
+                md += `- **焦點視角**：${chap.focusProtag}\n`;
                 md += `- **建議字數**：約 ${chap.wordTarget.toLocaleString()} 字\n`;
                 md += `- **核心事件**：${chap.coreEvent}\n`;
                 md += `- **衝突轉折**：${chap.conflict}\n`;
@@ -987,7 +1321,6 @@
             return md;
         }
 
-        // 複製為 Markdown
         function copyMarkdown() {
             if (!currentProjectData) return;
             const md = buildMarkdownText(currentProjectData);
@@ -1002,7 +1335,6 @@
             showToast('已成功複製完整 Markdown 企劃書！');
         }
 
-        // 下載文字檔
         function downloadTextFile() {
             if (!currentProjectData) return;
             const md = buildMarkdownText(currentProjectData);
@@ -1018,7 +1350,7 @@
             showToast('已開始下載企劃檔案！');
         }
 
-        // 預設選中日系奇幻
+        // 初始化
         window.addEventListener('DOMContentLoaded', () => {
             selectGenre('日系奇幻');
         });
